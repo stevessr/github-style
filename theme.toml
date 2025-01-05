@@ -1,7 +1,7 @@
 # theme.toml template for a Hugo theme
 # See https://github.com/gohugoio/hugoThemes#themetoml for an example
 
-name = "Github Style"
+"name" = "Github Style"
 license = "MIT"
 licenselink = "https://github.com/MeiK2333/github-style/blob/master/LICENSE"
 description = "github-style hugo theme"
@@ -10,12 +10,18 @@ demosite = "https://meik2333.com/"
 tags = ["blog", "google analytics"]
 features = ["google analytics"]
 min_version = "0.41"
+#其实是二改快改疯了
 
 [author]
-  name = "stevessr"
-  homepage = "https://github.com/MeiK2333"
+  "name" = "stevessr"
+  homepage = "https://github.com/stevessr"
 
 [params]
   favicon = "/images/github-mark.png"
   avatar = "/images/avatar.gif"
   MathJax = true
+
+[sitemap]
+  changefreq = "daily"      # 页面更新频率，例如 "daily", "weekly", "monthly"
+  priority = 0.5            # 默认页面优先级，范围 0.0 - 1.0
+  file"name" = "sitemap.xml"  # 生成的文件名（默认是 sitemap.xml）

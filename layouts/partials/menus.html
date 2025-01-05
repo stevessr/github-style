@@ -1,5 +1,7 @@
 {{ $section := where .Site.RegularPages "Section" "in" (slice "post") }}
 {{ $section_count := len $section }}
+{{ $tags_count := len .Site.Taxonomies.tags }}
+{{ $categories_count := len .Site.Taxonomies.categories }}
 
 <div class="mt-4 position-sticky top-0 d-none d-md-block bg-white width-full border-bottom color-border-secondary"
   style="z-index:3;">
@@ -28,6 +30,26 @@
               </svg>
               Posts
               <span class="Counter">{{ $section_count}}</span>
+            </a>
+            <a class="UnderlineNav-item {{ if eq .Type "tags" }} selected {{ end }}" href="{{urls.JoinPath .Site.BaseURL "tags"}}">
+              <svg class="octicon octicon-tag UnderlineNav-octicon hide-sm" height="16" viewBox="0 0 16 16"
+                version="1.1" width="16">
+                <path fill-rule="evenodd"
+                  d="M7.73.094a2 2 0 00-1.414.586L.586 6.41A2 2 0 000 7.828v6.586A2 2 0 002 16h6.586a2 2 0 001.414-.586l5.657-5.657a2 2 0 00.586-1.414V2a2 2 0 00-2-2H7.828a2 2 0 00-.098.094zM1 7.828a1 1 0 01.293-.707l5.657-5.657A1 1 0 017.828 1H13a1 1 0 011 1v5.172a1 1 0 01-.293.707l-5.657 5.657A1 1 0 017.172 14H2a1 1 0 01-1-1V7.828zM6 3a1 1 0 100 2 1 1 0 000-2z">
+                </path>
+              </svg>
+              Tags
+              <span class="Counter">{{ $tags_count}}</span>
+            </a>
+            <a class="UnderlineNav-item {{ if eq .Type "categories" }} selected {{ end }}" href="{{urls.JoinPath .Site.BaseURL "categories"}}">
+              <svg class="octicon octicon-list-unordered UnderlineNav-octicon hide-sm" height="16" viewBox="0 0 16 16"
+                version="1.1" width="16">
+                <path fill-rule="evenodd"
+                  d="M2.5 12.75a.75.75 0 100-1.5.75.75 0 000 1.5zm0-4.5a.75.75 0 100-1.5.75.75 0 000 1.5zm0-4.5a.75.75 0 100-1.5.75.75 0 000 1.5zM5 12.25a.75.75 0 000 1.5h9a.75.75 0 000-1.5H5zm0-4.5a.75.75 0 000 1.5h9a.75.75 0 000-1.5H5zm0-4.5a.75.75 0 000 1.5h9a.75.75 0 000-1.5H5z">
+                </path>
+              </svg>
+              Categories
+              <span class="Counter">{{ $categories_count}}</span>
             </a>
           </nav>
           <div class="profile-color-modes js-promo-color-modes-banner-profile isInitialToggle">

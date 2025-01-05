@@ -48,6 +48,21 @@ pygmentsUseClasses = true
     href = "https://meik2333.com"
     icon = "https://meik2333.com/images/avatar.png"
 
+[params.CDN]
+    gitalk_css = "https://data.rdfzsz.eu.org/css/gitalk.css"
+    gitalk_min_js = "https://data.rdfzsz.eu.org/js/gitalk.min.js"
+    theme_mode_js = "https://data.rdfzsz.eu.org/js/theme-mode.js"
+    frameworks_min_css = "https://data.rdfzsz.eu.org/css/frameworks.min.css"
+    github_min_css = "https://data.rdfzsz.eu.org/css/github.min.css"
+    github_style_css = "https://data.rdfzsz.eu.org/css2/github-style.css"
+    github_style_js = "https://data.rdfzsz.eu.org/js2/github-style.js"
+    light_css = "https://data.rdfzsz.eu.org/css/light.css"
+    dark_css = "https://data.rdfzsz.eu.org/css/dark.css"
+    syntax_css = "https://data.rdfzsz.eu.org/css/syntax.css"
+    toc_js = "https://data.rdfzsz.eu.org/js2/toc.js"
+    toc_css = "https://data.rdfzsz.eu.org/css/toc.css"
+    mark_es6_min_js = 'https://data.rdfzsz.eu.org/js/mark.es6.min.js'
+
 [frontmatter]
   lastmod = ["lastmod", ":fileModTime", ":default"]
 

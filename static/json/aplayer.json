@@ -1,0 +1,183 @@
+[
+    {
+    "name": "Dane Street",
+    "artist": "Goldmund",
+    "url": "https://data.rdfzsz.eu.org/music/Dane%20Street_Goldmund.mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/Dane%20Street_Goldmund.jpg"
+    },
+    {
+    "name": "Bamboo",
+    "artist": "Piano",
+    "url": "https://data.rdfzsz.eu.org/music/Bamboo_Piano%20Master.mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/bamboo.jfif"
+    },
+    {
+    "name": "Alone",
+    "artist": "Marshmello",
+    "url": "https://data.rdfzsz.eu.org/music/Alone%20-%20Marshmello%20-%20%E5%8D%95%E6%9B%B2%20-%20%E7%BD%91%E6%98%93%E4%BA%91%E9%9F%B3%E4%B9%90.mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/109951163311376025.jpg"
+    },
+    {
+    "name": "awake",
+    "artist": "flica",
+    "url": "https://data.rdfzsz.eu.org/music/awake_flica.mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/109951168145922570.jpg"
+    },
+    {
+    "name": "secret base ~君がくれたもの~ (10 years after Ver.)",
+    "artist": "茅野愛衣 ",
+    "url": "https://data.rdfzsz.eu.org/music/secret base ~君がくれたもの~ (10 years after Ver.).mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/secret base ~君がくれたもの.jpg"
+    },
+    {
+    "name": "secret base ~君がくれたもの~ (Memento mori Ver.)",
+    "artist": "茅野愛衣 ",
+    "url": "https://data.rdfzsz.eu.org/music/secret base ~君がくれたもの~ (Memento mori Ver.).mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/secret base ~君がくれたもの.jpg"
+    },
+    {
+    "name": "ハサミガール",
+    "artist": "ハコニワリリィ ",
+    "url": "https://data.rdfzsz.eu.org/music/ハサミガール.mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/ハサミガール.jpg"
+    },
+    {
+    "name": "Valse de la Rose",
+    "artist": "Les Petits Parisians ",
+    "url": "https://data.rdfzsz.eu.org/music/Valse de la Rose.mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/Valse de la Rose.jpg"
+    },
+    {
+    "name": "Hey, Soul Sister",
+    "artist": "Train",
+    "url": "https://data.rdfzsz.eu.org/music/Hey, Soul Sister.mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/Hey, Soul Sister.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/music/Hey, Soul Sister.lrc"
+    },
+    {
+    "name": "Citrus Love",
+    "artist": "Bao The Whale, Overspace",
+    "url": "https://data.rdfzsz.eu.org/music/Citrus Love.mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/Citrus Love.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/music/Citrus Love.lrc"
+    },
+    {
+    "name": "Cruel Summer",
+    "artist": "Talyor Swift",
+    "url": "https://data.rdfzsz.eu.org/music/Cruel Summer.mp3",
+    "cover": "https://data.rdfzsz.eu.org/music/Cruel Summer.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/music/Cruel Summer.lrc"
+    },
+    {
+    "name": "アイドル",
+    "artist": "YOASOBI",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/アイドル.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/アイドル.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/lrc/アイドル.lrc"
+    },
+    {
+    "name": "夜に駆ける",
+    "artist": "YOASOBI",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/夜に駆ける.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/夜に駆ける.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/lrc/夜に駆ける.lrc"
+    },
+    {
+    "name": "UNDEAD",
+    "artist": "YOASOBI",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/UNDEAD.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/UNDEAD.jpg"
+    },
+    {
+    "name": "怪物",
+    "artist": "YOASOBI",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/怪物.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/怪物.jpg"
+    },
+    {
+    "name": "勇者",
+    "artist": "YOASOBI",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/勇者.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/勇者.jpg"
+    },
+    {
+    "name": "孤勇者",
+    "artist": "陈奕迅",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/孤勇者.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/孤勇者.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/lrc/孤勇者.lrc"
+    },
+    {
+    "name": "Maps",
+    "artist": "Maroon 5",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/Maps.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/Maps.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/lrc/Maps.lrc"
+    },
+    {
+    "name": "WHITE NIGHT",
+    "artist": "Jake Miller, HOYO-MiX",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/WHITE NIGHT.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/WHITE NIGHT.jpg"
+    },
+    {
+    "name": "不眠之夜",
+    "artist": "Jake Miller, HOYO-MiX",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/不眠之夜.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/WHITE NIGHT.jpg"
+    },
+    {
+    "name": "さざ波 La vaguelette",
+    "artist": "HOYO-MiX",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/さざ波 La vaguelette.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/さざ波 La vaguelette.jpg"
+    },
+    {
+    "name": "Da Capo",
+    "artist": "HOYO-MiX",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/Da Capo.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/Da Capo.jpg"
+    },
+    {
+    "name": "Moon Halo - Honkai Impact 3Rd Everlasting Flames Animated Short Theme",
+    "artist": "HOYO-MiX, 茶理理, TetraCalyx, Hanser",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/Moon Halo.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/Moon Halo.jpg"
+    },
+    {
+    "name": "傷つく誰かの心を守ることができたなら",
+    "artist": "HOYO-MiX",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/傷つく誰かの心を守ることができたなら.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/INSIDE.jpg"
+    },
+    {
+    "name": "銀河を独り揺蕩う",
+    "artist": "HOYO-MiX",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/銀河を独り揺蕩う.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/INSIDE.jpg"
+    },
+    {
+    "name": "翼の生えた希望",
+    "artist": "HOYO-MiX",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/翼の生えた希望.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/INSIDE.jpg"
+    },
+    {
+    "name": "もし太陽を見たことがなかったのなら",
+    "artist": "HOYO-MiX, ロビン, Chevy",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/もし太陽を見たことがなかったのなら.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/もし太陽を見たことがなかったのなら.jpg"
+    },
+    {
+    "name": "Interstellar Journey",
+    "artist": "HOYO-MiX, Lea Sirk, 王可鑫, 宫奇, 文驰",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/Interstellar Journey.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/Interstellar Journey.jpg"
+    },
+    {
+    "name": "角砂糖が沈むまで",
+    "artist": "Sān-Z, HOYO-MiX, 阿蘭",
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/角砂糖が沈むまで.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/角砂糖が沈むまで.jpg"
+    }
+]
