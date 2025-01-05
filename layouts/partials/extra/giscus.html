@@ -1,0 +1,27 @@
+{{ if .Site.Params.Comment }}
+<!--上级 globalscript.html-->
+{{ end }}
+{{ if .Site.Params.enableGiscus }}
+<script src="https://giscus.app/client.js"
+        data-repo="{{ .Site.Params.Giscus.repo }}"
+        data-repo-id="{{ .Site.Params.Giscus.repoid }}"
+        data-category="{{ .Site.Params.Giscus.category }}"
+        data-category-id="{{ .Site.Params.Giscus.categoryid }}"
+        data-mapping="{{ .Site.Params.Giscus.mapping }}"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="1"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+		data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
+{{ end }}
+
+{{ if false }}
+
+<!--place your code upon-->
+
+{{ end }}

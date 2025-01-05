@@ -12,5 +12,10 @@ features = ["google analytics"]
 min_version = "0.41"
 
 [author]
-  name = "MeiK"
+  name = "stevessr"
   homepage = "https://github.com/MeiK2333"
+
+[params]
+  favicon = "/images/github-mark.png"
+  avatar = "/images/avatar.gif"
+  MathJax = true
