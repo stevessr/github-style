@@ -24,4 +24,4 @@ min_version = "0.41"
 [sitemap]
   changefreq = "daily"      # 页面更新频率，例如 "daily", "weekly", "monthly"
   priority = 0.5            # 默认页面优先级，范围 0.0 - 1.0
-  file"name" = "sitemap.xml"  # 生成的文件名（默认是 sitemap.xml）
+  filename = "sitemap.xml"  # 生成的文件名（默认是 sitemap.xml）
