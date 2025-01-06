@@ -1,0 +1,204 @@
+/* 搜索容器 */
+.search-container {
+    position: absolute;
+    /* 固定在页面 */
+    top: 20%;
+    /* 距离顶部 20px */
+    left: 20px;
+    /* 距离右侧 20px */
+    z-index: 1000;
+    /* 确保在最上层 */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* 按钮和输入框之间的间距 */
+}
+
+/* 显示/隐藏搜索框的按钮 */
+#toggle-search-button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#toggle-search-button:hover {
+    background-color: #0056b3;
+    /* 鼠标悬停时按钮颜色 */
+}
+
+/* 搜索框容器 */
+#search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* 输入框 */
+#search-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    /* 输入框宽度 */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#search-input:focus {
+    border-color: #007bff;
+    /* 聚焦时边框颜色 */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    /* 聚焦时阴影 */
+    outline: none;
+    /* 移除默认聚焦轮廓 */
+}
+
+/* 搜索按钮 */
+#search-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#search-button:hover {
+    background-color: #0056b3;
+    /* 鼠标悬停时按钮颜色 */
+}
+
+/* 下拉菜单 */
+#search-dropdown {
+    display: none;
+    /* 默认隐藏 */
+    position: absolute;
+    top: 100%;
+    /* 位于输入框下方 */
+    right: 0;
+    /* 对齐到右侧 */
+    width: 300px;
+    /* 下拉菜单宽度 */
+    max-height: 400px;
+    /* 最大高度 */
+    overflow-y: auto;
+    /* 允许滚动 */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* 下拉菜单内容 */
+.dropdown-content {
+    padding: 10px;
+}
+
+/* 搜索结果项 */
+.search-result {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.search-result h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.search-result p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* 高亮关键词 */
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+/* 加载指示器 */
+#loading-indicator {
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
+    color: #888;
+}
+
+/* 暗色模式下的样式 */
+[data-color-mode="dark"] #theme-toggle-button {
+    color: white;
+    /* 暗色模式下按钮颜色 */
+}
+
+[data-color-mode="dark"] #search-input {
+    background-color: #333;
+    color: white;
+    border-color: #555;
+}
+
+[data-color-mode="dark"] #search-dropdown {
+    background-color: #333;
+    border-color: #555;
+    color: white;
+}
+
+[data-color-mode="dark"] .search-result {
+    border-bottom-color: #555;
+}
+
+[data-color-mode="dark"] .highlight {
+    background-color: #ffcc00;
+    /* 暗色模式下的高亮颜色 */
+    color: black;
+}
+
+/* 按钮容器 */
+#draggable-button-container {
+    position: absolute;
+    /* 固定在页面 */
+    top: 30px;
+    /* 初始位置 */
+    right: 20px;
+    /* 初始位置 */
+    z-index: 1000;
+    /* 确保在最上层 */
+    display: flex;
+    gap: 10px;
+    /* 按钮之间的间距 */
+    cursor: grab;
+    /* 拖动时显示抓取光标 */
+}
+
+#draggable-button-container:active {
+    cursor: grabbing;
+    /* 拖动时显示抓取中光标 */
+}
+
+/* 按钮样式 */
+#toggle-search-button,
+#theme-toggle-button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#toggle-search-button:hover,
+#theme-toggle-button:hover {
+    background-color: #0056b3;
+    /* 鼠标悬停时按钮颜色 */
+}

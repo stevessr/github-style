@@ -44,7 +44,6 @@
         </div>
       </div>
     </div>
-
     <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
       <a class="Header-link " href="{{ .Site.BaseURL }}">
         <img class="octicon octicon-mark-github v-align-middle" height="32" width="32" src="{{ .Site.Params.headerIcon }}">
@@ -62,3 +61,4 @@
     </div>
   </header>
 </div>
+{{ partial "extra/search.html" . }}

@@ -1,0 +1,16 @@
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<div class="search-container">
+  <div id="draggable-button-container">
+    <button id="toggle-search-button">🔍</button> <!-- 显示/隐藏搜索框的按钮 -->
+  </div>
+  <div id="search-box" style="display: none;"> <!-- 默认隐藏搜索框 -->
+    <input type="text" id="search-input" placeholder="Search...">
+    <button id="search-button">Search</button>
+    <div id="search-dropdown" class="dropdown">
+      <div id="search-results" class="dropdown-content"></div>
+      <div id="loading-indicator" style="display: none;">Loading more results...</div>
+    </div>
+  </div>
+</div>
+<script type="application/javascript" src='{{ "js/search.js" | absURL }}'></script>
+<link rel="stylesheet" href='{{ "css/search.css" | absURL }}' />
