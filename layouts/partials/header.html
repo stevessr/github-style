@@ -14,7 +14,13 @@
         </svg>
       </button>
     </div>
-    <div style="display: none;" id="header-search"
+    <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search-container').style.display = document.querySelector('#header-search-container').style.display == 'none'? 'flex': 'none'; document.querySelector('#search-input').focus();">
+        <svg height="24" class="octicon octicon-search" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd" d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+        </svg>
+      </button>
+    <div style="display: none;" id="header-search-container"
       class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
       <div
         class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
@@ -24,7 +30,7 @@
             autocomplete="off">
             <label
               class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
-              <input type="text"
+              <input type="text" id="search-input"
                 class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
                 name="q" value="" placeholder="Search" autocomplete="off">
             </label>
@@ -34,7 +40,7 @@
             autocomplete="off">
             <label
               class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
-              <input type="text"
+              <input type="text" id="search-input"
                 class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
                 name="q" value="" placeholder="Search" autocomplete="off">
               <input type="hidden" name="q" value="site:{{ .Site.BaseURL }}">

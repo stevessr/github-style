@@ -1,0 +1,29 @@
+.friend-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.friend-links li {
+  margin-bottom: 10px;
+}
+
+.friend-links a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.friend-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.friend-description {
+  margin-top: 5px;
+  font-size: 0.85em;
+  color: var(--color-text-secondary);
+}

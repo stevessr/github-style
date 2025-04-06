@@ -1,0 +1,22 @@
+{{ define "main" }}
+<div class="container">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+
+  <ul class="friend-links">
+    {{ range $.Site.Data.links }}
+    <li>
+      <a href="{{ .url }}" target="_blank" rel="noopener">
+        {{ if .avatar }}
+        <img src="{{ .avatar }}" alt="{{ .name }}" class="friend-avatar">
+        {{ end }}
+        {{ .name }}
+      </a>
+      {{ if .description }}
+      <p class="friend-description">{{ .description }}</p>
+      {{ end }}
+    </li>
+    {{ end }}
+  </ul>
+</div>
+{{ end }}

@@ -1,0 +1,77 @@
+.Header-search {
+  max-width: 272px;
+  width: 100%;
+  transition: .2s ease-in-out;
+  transition-property: max-width, padding-bottom, padding-top;
+}
+
+.Header-search:focus-within {
+  max-width: 544px;
+}
+
+.Header-search-label {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text-white);
+  vertical-align: middle;
+  background-color: var(--color-header-search-bg);
+  border: 1px solid var(--color-header-search-border);
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+.Header-search-label:focus-within {
+  background-color: hsla(0, 0%, 100%, .175);
+  border-color: var(--color-state-focus-border);
+  outline: none;
+}
+
+.Header-search-input {
+  min-height: 28px;
+  width: 100%;
+  padding: 5px 12px;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 14px;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.Header-search-input:focus {
+  border: 0;
+  box-shadow: none;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-state-focus-border);
+  outline: none;
+}
+
+::placeholder {
+  color: #c2c3c4;
+  opacity: 1;
+}
+
+/* Hidden Search Form Container */
+#header-search-container {
+  position: absolute;
+  top: 100%; /* Position below the header */
+  right: 0;
+  background-color: var(--color-header-bg);
+  border: 1px solid var(--color-header-search-border);
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 10; /* Ensure it's above other header elements */
+}
+
+/* Adjust Header-search to work within the container */
+.Header-search {
+  max-width: none; /* Remove max-width restriction */
+}

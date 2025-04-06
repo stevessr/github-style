@@ -52,3 +52,6 @@
 <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
 <script type="application/javascript" src='{{ "js/search.js" | absURL }}'></script>
 {{ end }}
+{{ range .Site.Params.custom_js -}}
+<script type="text/javascript" src="{{ . | absURL }}"></script>
+{{- end }}

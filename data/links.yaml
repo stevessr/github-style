@@ -1,0 +1,7 @@
+- name: "示例网站"
+  url: "https://example.com/"
+  avatar: "https://example.com/avatar.png"
+  description: "这是一个示例友链"
+- name: "另一个朋友"
+  url: "https://another-friend.org/"
+  description: "友情链接描述"

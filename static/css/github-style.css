@@ -182,8 +182,16 @@ body {
     display: none!important;
   }
   .Header-search {
-    max-width: 100%;
+  max-width: 100%;
+}
+
+/* Reduce padding for desktop navigation tabs */
+@media (min-width: 768px) {
+  .UnderlineNav-item {
+    padding-top: 8px !important;    /* Default might be larger */
+    padding-bottom: 8px !important; /* Default might be larger */
   }
+}
 }
 
 .pinned-item-desc img {

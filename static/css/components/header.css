@@ -1,0 +1,46 @@
+.Header {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding-left: 32px!important;
+  padding-right: 32px!important;
+  z-index: 32;
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-header-text);
+  background-color: var(--color-header-bg);
+}
+
+.Header-link {
+  align-items: center;
+  display: flex;
+  font-weight: 600;
+  color: var(--color-header-logo);
+  white-space: nowrap;
+}
+
+.Header-item {
+  margin-right: 16px;
+}
+
+.octicon {
+  fill: currentColor;
+}
+
+/* Search Icon Button */
+.Header .octicon-search {
+  color: var(--color-header-text);
+}
+
+.Header .btn-link.js-details-target {
+    padding: 0;
+}
+
+/* Reduce header padding on larger screens */
+@media (min-width: 768px) { /* Apply styles for screens 768px and wider */
+  .Header {
+    padding-top: 8px !important;    /* Reduce top padding from 16px */
+    padding-bottom: 8px !important; /* Reduce bottom padding from 16px */
+  }
+}
