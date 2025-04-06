@@ -112,7 +112,7 @@
   --color-action-list-item-danger-hover-bg: rgba(255,235,233,0.64);
   --color-action-list-item-danger-active-bg: #FFEBE9;
   --color-action-list-item-danger-hover-text: #cf222e;
-  --color-fg-default: #24292f;
+  --color-fg-default: #000000;
   --color-fg-muted: #57606a;
   --color-fg-subtle: #6e7781;
   --color-fg-on-emphasis: #ffffff;

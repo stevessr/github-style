@@ -10,10 +10,9 @@ body {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  padding-left: 32px!important;
-  padding-right: 32px!important;
+
   z-index: 32;
-  padding: 16px;
+  padding: 16px; /* Keep overall padding */
   font-size: 14px;
   line-height: 1.5;
   color: var(--color-header-text);
@@ -168,15 +167,13 @@ body {
 
 @media (max-width: 768px) {
   .Header {
-    padding-left: 24px!important;
-    padding-right: 24px!important;
+    /* Removed specific left/right padding */
   }
 }
 
 @media (max-width: 480px) {
   .Header {
-    padding-left: 16px!important;
-    padding-right: 16px!important;
+    /* Removed specific left/right padding */
   }
   .mobile-none {
     display: none!important;
@@ -196,4 +193,23 @@ body {
 
 .pinned-item-desc img {
   max-width: 100%;
+}
+
+/* Ensure UnderlineNav items use theme variables */
+.UnderlineNav-item {
+  color: var(--color-underlinenav-text);
+}
+
+/* Ensure Counter within UnderlineNav items uses theme variables */
+.UnderlineNav-item .Counter {
+  color: var(--color-underlinenav-counter-text);
+  background-color: var(--color-counter-bg); /* Also ensure background uses theme variable */
+}
+
+/* Style for the sticky year list */
+.js-sticky {
+  position: sticky;
+  /* top: 74px; is already set inline in the HTML */
+  /* Ensure it stays above other content within its container if needed */
+  /* z-index: 1; */ /* Uncomment if necessary */
 }
