@@ -1,5 +1,5 @@
 .Header-search {
-  max-width: 272px;
+  /* max-width: 272px; */ /* Removed max-width */
   width: 100%;
   transition: .2s ease-in-out;
   transition-property: max-width, padding-bottom, padding-top;
@@ -58,20 +58,23 @@
   opacity: 1;
 }
 
-/* Hidden Search Form Container */
+/* Container adjustments might be needed depending on final layout */
 #header-search-container {
-  position: absolute;
-  top: 100%; /* Position below the header */
-  right: 0;
-  background-color: var(--color-header-bg);
-  border: 1px solid var(--color-header-search-border);
-  border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  z-index: 10; /* Ensure it's above other header elements */
+  /* Removed absolute positioning and other styles */
+  /* Add specific alignment styles if needed for nav integration */
+  margin-left: auto; /* Push search to the right within the nav flex container */
+  align-self: center; /* Vertically center */
 }
 
-/* Adjust Header-search to work within the container */
-.Header-search {
-  max-width: none; /* Remove max-width restriction */
+/* This second .Header-search rule might be redundant now or need adjustment */
+/* .Header-search { */
+  /* max-width: none; */ /* Remove max-width restriction */
+/* } */
+
+/* Style for highlighted search terms */
+.highlight {
+  background-color: yellow;
+  color: black; /* Ensure text is readable on yellow background */
+  padding: 0.1em; /* Add slight padding */
+  border-radius: 3px; /* Optional: rounded corners */
 }

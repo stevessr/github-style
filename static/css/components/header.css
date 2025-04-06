@@ -28,10 +28,15 @@
   fill: currentColor;
 }
 
-/* Search Icon Button */
-.Header .octicon-search {
-  color: var(--color-header-text);
+/* Target the specific container holding nav and search on desktop */
+.Header-item.Header-item--full.d-md-flex {
+  margin-right: 0; /* Override the default Header-item margin */
 }
+
+/* Search Icon Button - Removed */
+/* .Header .octicon-search {
+  color: var(--color-header-text);
+} */
 
 .Header .btn-link.js-details-target {
     padding: 0;

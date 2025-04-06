@@ -32,3 +32,54 @@ body {
 .markdown-body h6 {
   margin-bottom: 0.5em;
 }
+
+/* --- Added Search Styles --- */
+
+/* Style the search type dropdown to match header input */
+#search-type-select {
+  height: 28px; /* Match input-sm height */
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 28px;
+  vertical-align: middle; /* Align with input */
+  background-color: var(--color-canvas-subtle);
+  border-color: var(--color-border-default);
+  color: var(--color-fg-default);
+}
+
+/* Style the results container */
+#header-search-results {
+  margin-top: 4px; /* Space below the input */
+  border: 1px solid var(--color-border-default);
+  background-color: var(--color-canvas-overlay); /* Use overlay color for dropdowns */
+  box-shadow: var(--color-shadow-medium); /* Add some shadow */
+}
+
+/* Style individual result rows */
+#header-search-results .Box-row {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border-muted);
+}
+#header-search-results .Box-row:last-child {
+  border-bottom: none;
+}
+
+#header-search-results .Box-row h5 {
+  font-size: 1em; /* Adjust as needed */
+}
+#header-search-results .Box-row h5 a {
+  color: var(--color-accent-fg);
+  text-decoration: none;
+}
+#header-search-results .Box-row h5 a:hover {
+  text-decoration: underline;
+}
+
+/* Highlight style */
+#header-search-results .highlight {
+  background-color: var(--color-attention-subtle); /* Use theme attention color */
+  font-weight: bold;
+  color: var(--color-fg-default);
+  padding: 0.1em;
+  border-radius: 3px;
+}

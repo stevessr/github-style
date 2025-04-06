@@ -1,251 +1,284 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const toggleSearchButton = document.getElementById("toggle-search-button");
-  const searchBox = document.getElementById("search-box");
-  const searchInput = document.getElementById("search-input");
-  const searchButton = document.getElementById("search-button");
-  const searchDropdown = document.getElementById("search-dropdown");
-  const searchResults = document.getElementById("search-results");
-  const loadingIndicator = document.getElementById("loading-indicator");
+  // References to header search elements
+  const searchInput = document.getElementById("search-input"); // Input field in the header
+  const searchResultsContainer = document.getElementById(
+    "header-search-results"
+  ); // The whole results box
+  const searchResultsList = document.getElementById(
+    "header-search-results-list"
+  ); // The list within the results box
+  const searchForm = document.getElementById("header-search-form"); // The search form itself
+  const searchTypeSelect = document.getElementById("search-type-select"); // The dropdown (local/google)
+  const googleSiteInput = document.getElementById("google-site-input"); // Hidden input for google search
 
-  let fuse; // Fuse.js 实例
-  let allResults = []; // 所有搜索结果
-  let visibleResults = []; // 当前可见的搜索结果
-  const resultsPerPage = 10; // 每次加载的结果数量
-  let currentPage = 0; // 当前加载的页数
+  let fuse; // Fuse.js instance
 
-  // 显示/隐藏搜索框
-  toggleSearchButton.addEventListener("click", function () {
-    if (searchBox.style.display === "none" || searchBox.style.display === "") {
-      searchBox.style.display = "flex"; // 显示搜索框
-      searchInput.focus(); // 聚焦到输入框
-    } else {
-      searchBox.style.display = "none"; // 隐藏搜索框
-      searchDropdown.style.display = "none"; // 隐藏下拉菜单
-    }
-  });
-
-  // 监听页面滚动事件
-  let isScrolling;
-  window.addEventListener("scroll", function () {
-    clearTimeout(isScrolling);
-    searchBox.style.display = "none"; // 隐藏搜索框
-    searchDropdown.style.display = "none"; // 隐藏下拉菜单
-
-    // 滚动停止后延迟显示按钮
-    isScrolling = setTimeout(function () {
-      toggleSearchButton.style.display = "block";
-    }, 500);
-  });
-
-  // 加载 JSON 索引文件
+  // --- Initialize Fuse.js ---
   fetch("/index.json")
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok for index.json");
+      }
+      return response.json();
+    })
     .then((data) => {
       fuse = new Fuse(data, {
         keys: ["title", "content"],
         includeMatches: true,
         minMatchCharLength: 2,
-        threshold: 0.3,
+        threshold: 0.3, // Adjust sensitivity as needed
+        ignoreLocation: true, // Search entire strings
       });
-
-      searchButton.addEventListener("click", function () {
-        const query = searchInput.value;
-        if (query.trim() === "") {
-          searchResults.innerHTML = "<p>Please enter a search term.</p>";
-          searchDropdown.style.display = "block"; // 显示下拉菜单
-          return;
-        }
-        currentPage = 0; // 重置页数
-        allResults = fuse.search(query); // 获取所有匹配结果
-        visibleResults = []; // 清空可见结果
-        loadMoreResults(); // 加载第一页结果
-        searchDropdown.style.display = "block"; // 显示下拉菜单
-      });
-
-      // 监听下拉菜单滚动事件
-      searchDropdown.addEventListener("scroll", function () {
-        if (shouldLoadMoreResults()) {
-          loadMoreResults();
-        }
-      });
-
-      // 点击外部区域关闭下拉菜单
-      document.addEventListener("click", function (event) {
-        if (!event.target.closest(".search-container")) {
-          searchDropdown.style.display = "none";
-        }
-      });
-
-      function loadMoreResults() {
-        const start = currentPage * resultsPerPage;
-        const end = start + resultsPerPage;
-        const newResults = allResults.slice(start, end);
-
-        if (newResults.length > 0) {
-          visibleResults = visibleResults.concat(newResults);
-          renderResults(visibleResults);
-          currentPage++;
-        }
-
-        // 显示或隐藏加载指示器
-        if (end >= allResults.length) {
-          loadingIndicator.style.display = "none";
-        } else {
-          loadingIndicator.style.display = "block";
-        }
-      }
-
-      function renderResults(results) {
-        const fragment = document.createDocumentFragment(); // 使用文档片段优化性能
-
-        results.forEach((result) => {
-          const { item, matches } = result;
-          const snippets = getSnippets(item.content, matches); // 获取合并后的匹配片段
-
-          const resultElement = document.createElement("div");
-          resultElement.className = "search-result";
-          resultElement.innerHTML = `
-                  <h3><a href="${item.permalink}">${item.title}</a></h3>
-                  ${snippets.map((snippet) => `<p>${snippet}</p>`).join("")}
-                `;
-          fragment.appendChild(resultElement);
-        });
-
-        searchResults.innerHTML = ""; // 清空当前结果
-        searchResults.appendChild(fragment); // 批量插入新结果
-      }
-
-      function highlightMatches(content, matches) {
-        let highlightedContent = content;
-        matches.forEach((match) => {
-          if (match.key === "content") {
-            match.indices.forEach(([start, end]) => {
-              const matchedText = content.substring(start, end + 1);
-              highlightedContent = highlightedContent.replace(
-                new RegExp(matchedText, "gi"),
-                `<span class="highlight">${matchedText}</span>`
-              );
-            });
-          }
-        });
-        return highlightedContent;
-      }
-
-      function getSnippets(content, matches) {
-        const snippetLength = 100; // 每个上下文片段的最大长度
-        const snippets = [];
-
-        if (matches.length > 0 && matches[0].indices.length > 0) {
-          // 提取所有匹配的范围
-          const ranges = matches
-            .filter((match) => match.key === "content")
-            .flatMap((match) =>
-              match.indices.map(([start, end]) => ({ start, end }))
-            );
-
-          // 合并所有重叠的范围
-          const mergedRanges = mergeRanges(ranges);
-
-          // 根据合并后的范围提取片段
-          mergedRanges.forEach(({ start, end }) => {
-            const matchStart = Math.max(0, start - snippetLength / 2);
-            const matchEnd = Math.min(content.length, end + snippetLength / 2);
-
-            let snippet = content.substring(matchStart, matchEnd);
-            if (matchStart > 0) snippet = `...${snippet}`;
-            if (matchEnd < content.length) snippet = `${snippet}...`;
-
-            // 高亮匹配的关键词
-            const matchedText = content.substring(start, end + 1);
-            snippet = snippet.replace(
-              new RegExp(matchedText, "gi"),
-              `<span class="highlight">${matchedText}</span>`
-            );
-
-            snippets.push(snippet);
-          });
-        } else {
-          let snippet = content.substring(0, snippetLength);
-          if (content.length > snippetLength) snippet += "...";
-          snippets.push(snippet);
-        }
-
-        return snippets;
-      }
-
-      function mergeRanges(ranges) {
-        if (ranges.length === 0) return [];
-
-        // 按起始位置排序
-        ranges.sort((a, b) => a.start - b.start);
-
-        const merged = [ranges[0]];
-        for (let i = 1; i < ranges.length; i++) {
-          const last = merged[merged.length - 1];
-          const current = ranges[i];
-
-          // 如果当前范围与上一个范围重叠或相邻，则合并
-          if (current.start <= last.end + 1) {
-            last.start = Math.min(last.start, current.start);
-            last.end = Math.max(last.end, current.end);
-          } else {
-            merged.push(current);
-          }
-        }
-
-        return merged;
-      }
-
-      function shouldLoadMoreResults() {
-        const { scrollTop, scrollHeight, clientHeight } = searchDropdown;
-        return scrollTop + clientHeight >= scrollHeight - 10; // 接近底部时加载
-      }
+      console.log("Fuse.js initialized successfully.");
     })
-    .catch((error) => console.error("Error loading search index:", error));
-});
+    .catch((error) => {
+      console.error("Error loading or initializing search index:", error);
+      // Optionally disable local search UI elements if index fails to load
+      if (searchTypeSelect) {
+        const localOption = searchTypeSelect.querySelector(
+          'option[value="local"]'
+        );
+        if (localOption) {
+          localOption.disabled = true;
+          localOption.textContent = "Local (Error)";
+        }
+        // Switch to Google if local fails? Or just show error.
+        // searchTypeSelect.value = "google";
+      }
+    });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const draggableContainer = document.getElementById(
-    "draggable-button-container"
-  );
-  let isDragging = false;
-  let offsetX, offsetY;
-
-  // 鼠标按下时开始拖动
-  draggableContainer.addEventListener("mousedown", function (event) {
-    if (event.target.tagName === "BUTTON") {
-      // 如果点击的是按钮，则不拖动
+  // --- Function to perform local search ---
+  window.performLocalSearch = function (query) {
+    if (!fuse) {
+      console.error("Fuse.js is not initialized.");
+      searchResultsList.innerHTML =
+        '<div class="Box-row">Search index not loaded.</div>';
+      searchResultsContainer.classList.remove("d-none"); // Show container
       return;
     }
-    isDragging = true;
-    offsetX = event.clientX - draggableContainer.getBoundingClientRect().left;
-    offsetY = event.clientY - draggableContainer.getBoundingClientRect().top;
-  });
 
-  // 鼠标移动时更新位置
-  document.addEventListener("mousemove", function (event) {
-    if (isDragging) {
-      const x = event.clientX - offsetX;
-      const y = event.clientY - offsetY;
+    if (query.trim() === "") {
+      searchResultsList.innerHTML =
+        '<div class="Box-row">Please enter a search term.</div>';
+      searchResultsContainer.classList.remove("d-none"); // Show container
+      return;
+    }
 
-      // 限制拖动范围在视口内
-      const containerWidth = draggableContainer.offsetWidth;
-      const containerHeight = draggableContainer.offsetHeight;
-      const maxX = window.innerWidth - containerWidth;
-      const maxY = window.innerHeight - containerHeight;
+    const results = fuse.search(query);
+    renderResults(results);
+    searchResultsContainer.classList.remove("d-none"); // Show container
+  };
 
-      draggableContainer.style.left = `${Math.min(Math.max(x, 0), maxX)}px`;
-      draggableContainer.style.top = `${Math.min(Math.max(y, 0), maxY)}px`;
+  // --- Function to render search results ---
+  function renderResults(results) {
+    searchResultsList.innerHTML = ""; // Clear previous results
+
+    if (results.length === 0) {
+      searchResultsList.innerHTML =
+        '<div class="Box-row">No results found.</div>';
+      return;
+    }
+
+    const fragment = document.createDocumentFragment(); // Use document fragment for performance
+
+    results.slice(0, 20).forEach((result) => {
+      // Limit to e.g., 20 results for header display
+      const { item, matches } = result;
+      // Get a concise snippet with highlighted matches
+      const snippet = getSnippet(item.content, matches);
+
+      const resultElement = document.createElement("div");
+      resultElement.className = "Box-row Box-row--hover-blue"; // Use Box styles for consistency
+      resultElement.innerHTML = `
+        <h5 class="mb-1"><a href="${item.permalink}">${item.title}</a></h5>
+        ${
+          snippet
+            ? `<p class="text-small color-fg-muted mb-0">${snippet}</p>`
+            : ""
+        }
+      `;
+      fragment.appendChild(resultElement);
+    });
+
+    searchResultsList.appendChild(fragment);
+  }
+
+  // --- Function to get a highlighted snippet ---
+  function getSnippet(content, matches) {
+    const snippetLength = 120; // Max length of the snippet
+    let bestSnippet = content.substring(0, snippetLength); // Default snippet
+    let bestScore = -1;
+
+    if (matches && matches.length > 0) {
+      matches.forEach((match) => {
+        if (
+          match.key === "content" &&
+          match.indices &&
+          match.indices.length > 0
+        ) {
+          match.indices.forEach(([start, end]) => {
+            const matchLength = end - start + 1;
+            const contextStart = Math.max(
+              0,
+              start - Math.floor((snippetLength - matchLength) / 2)
+            );
+            const contextEnd = Math.min(
+              content.length,
+              contextStart + snippetLength
+            );
+            let snippet = content.substring(contextStart, contextEnd);
+
+            // Add ellipses
+            if (contextStart > 0) snippet = "..." + snippet;
+            if (contextEnd < content.length) snippet = snippet + "...";
+
+            // Highlight the specific match within the snippet
+            const highlightStart =
+              start - contextStart + (contextStart > 0 ? 3 : 0); // Adjust for ellipsis
+            const highlightEnd = highlightStart + matchLength;
+            snippet =
+              snippet.substring(0, highlightStart) +
+              `<span class="highlight">${snippet.substring(
+                highlightStart,
+                highlightEnd
+              )}</span>` +
+              snippet.substring(highlightEnd);
+
+            // Simple scoring: prioritize snippets containing matches
+            const score = match.score !== undefined ? 1 - match.score : 1; // Fuse score (lower is better)
+            if (score > bestScore) {
+              bestScore = score;
+              bestSnippet = snippet;
+            }
+          });
+        } else if (match.key === "title" && bestScore < 0) {
+          // If only title matches, use beginning of content as snippet
+          bestSnippet =
+            content.substring(0, snippetLength) +
+            (content.length > snippetLength ? "..." : "");
+        }
+      });
+    } else {
+      bestSnippet =
+        content.substring(0, snippetLength) +
+        (content.length > snippetLength ? "..." : "");
+    }
+
+    return bestSnippet;
+  }
+
+  // --- Event Listener for Form Submission ---
+  if (searchForm) {
+    searchForm.addEventListener("submit", function (event) {
+      const selectedType = searchTypeSelect.value;
+      const query = searchInput.value.trim();
+      // const selectedType = searchTypeSelect.value; // Removed duplicate declaration
+
+      event.preventDefault(); // Prevent default submission for all types initially
+
+      if (selectedType === "local") {
+        performLocalSearch(query);
+        searchInput.blur(); // Remove focus after local search
+        return false; // Explicitly prevent default form submission for local search
+      } else {
+        // Handle external searches (Google, Bing, DuckDuckGo)
+        if (query) {
+          let searchUrl;
+          const siteRestriction = googleSiteInput.value; // e.g., "site:yourdomain.com"
+          const combinedQuery = `${query} ${siteRestriction}`;
+          if (selectedType === "google") {
+            searchUrl = `https://www.google.com/search?q=${encodeURIComponent(
+              combinedQuery
+            )}`;
+          } else if (selectedType === "bing") {
+            searchUrl = `https://www.bing.com/search?q=${encodeURIComponent(
+              query
+            )}`;
+          } else if (selectedType === "duckduckgo") {
+            searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(
+              query
+            )}`;
+          }
+
+          if (searchUrl) {
+            window.open(searchUrl, "_blank"); // Open search in a new tab
+            // Hide results container if it was somehow visible
+            searchResultsContainer.classList.add("d-none");
+          }
+        } else {
+          // Optional: Handle empty query for external searches if needed
+          console.log(`External search query (${selectedType}) is empty.`);
+        }
+      }
+    });
+  }
+
+  // --- Event Listener for Search Type Change ---
+  if (searchTypeSelect) {
+    searchTypeSelect.addEventListener("change", function () {
+      const selectedType = this.value;
+      // Hide local results if an external search engine is selected
+      if (
+        selectedType === "google" ||
+        selectedType === "bing" ||
+        selectedType === "duckduckgo"
+      ) {
+        searchResultsContainer.classList.add("d-none");
+        // Ensure the correct input name is set (though default submit is prevented)
+        searchInput.name = "q";
+        // Keep the hidden input disabled, its value is read directly
+        googleSiteInput.disabled = true;
+      } else {
+        // Local search selected
+        searchInput.name = "q"; // Keep name as 'q' for consistency or local handling
+        googleSiteInput.disabled = true;
+      }
+    });
+    // Initial setup based on default selection - ensure hidden input is disabled
+    googleSiteInput.disabled = true;
+  }
+
+  // --- Event Listener to Hide Results on Outside Click ---
+  document.addEventListener("click", function (event) {
+    const isClickInsideSearch =
+      searchResultsContainer.contains(event.target) ||
+      searchInput.contains(event.target) ||
+      searchTypeSelect.contains(event.target);
+
+    if (
+      !isClickInsideSearch &&
+      !searchResultsContainer.classList.contains("d-none")
+    ) {
+      searchResultsContainer.classList.add("d-none");
     }
   });
 
-  // 鼠标松开时停止拖动
-  document.addEventListener("mouseup", function () {
-    isDragging = false;
-  });
+  // Optional: Hide results when input loses focus (if not clicking dropdown/results)
+  if (searchInput) {
+    searchInput.addEventListener("blur", function (event) {
+      // Delay check slightly to allow click on results/dropdown
+      setTimeout(() => {
+        const relatedTarget = event.relatedTarget;
+        if (
+          !searchResultsContainer.contains(relatedTarget) &&
+          !searchTypeSelect.contains(relatedTarget)
+        ) {
+          searchResultsContainer.classList.add("d-none");
+        }
+      }, 100);
+    });
+  }
 
-  // 初始化按钮位置
-  draggableContainer.style.position = "fixed";
-  draggableContainer.style.left = "20px";
-  draggableContainer.style.top = "20px";
+  // Optional: Perform local search on input typing (debounced)
+  let debounceTimer;
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      if (searchTypeSelect.value === "local") {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          performLocalSearch(searchInput.value);
+        }, 300); // Adjust debounce time (ms) as needed
+      }
+    });
+  }
 });

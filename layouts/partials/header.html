@@ -14,41 +14,59 @@
         </svg>
       </button>
     </div>
-    <button class="Header-link btn-link js-details-target" type="button"
-        onclick="document.querySelector('#header-search-container').style.display = document.querySelector('#header-search-container').style.display == 'none'? 'flex': 'none'; document.querySelector('#search-input').focus();">
-        <svg height="24" class="octicon octicon-search" viewBox="0 0 16 16" version="1.1" width="24">
-          <path fill-rule="evenodd" d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
-        </svg>
-      </button>
-    <div style="display: none;" id="header-search-container"
-      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
-      <div
-        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
-        <div class="position-relative">
-          {{ if .Site.Params.enableSearch }}
-          <form target="_blank" id="search-form" action="" accept-charset="UTF-8" method="get"
-            autocomplete="off">
-            <label
-              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
-              <input type="text" id="search-input"
-                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
-                name="q" value="" placeholder="Search" autocomplete="off">
-            </label>
-          </form>
-          {{ else }}
-          <form target="_blank" action="https://www.google.com/search" accept-charset="UTF-8" method="get"
-            autocomplete="off">
-            <label
-              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
-              <input type="text" id="search-input"
-                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
-                name="q" value="" placeholder="Search" autocomplete="off">
-              <input type="hidden" name="q" value="site:{{ .Site.BaseURL }}">
-            </label>
-          </form>
-          {{ end }}
+    <!-- Flex container for nav, search, and theme toggle -->
+    <div class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-md-0 d-md-flex flex-items-center">
+      <!-- Inserted Navigation -->
+      <nav class="UnderlineNav-body mr-md-3 d-none d-md-flex flex-items-center">
+        <a class="UnderlineNav-item {{ if .IsHome }} selected {{ end }}" href="{{ .Site.BaseURL }}">
+          Overview
+        </a>
+        <a class="UnderlineNav-item {{ if .IsSection }} selected {{ end }}{{ if eq .Type " tags" }} selected {{ end }}" href="{{urls.JoinPath .Site.BaseURL "post"}}">
+          Posts
+          {{ $section := where .Site.RegularPages "Section" "in" (slice "post") }}
+          {{ $section_count := len $section }}
+          {{ if gt $section_count 0 }}<span class="Counter">{{ $section_count}}</span>{{ end }}
+        </a>
+        <a class="UnderlineNav-item {{ if eq .RelPermalink "/links/" }} selected {{ end }}" href="{{urls.JoinPath .Site.BaseURL "links"}}">
+          友情链接
+        </a>
+        <a class="UnderlineNav-item {{ if eq .Type "tags" }} selected {{ end }}" href="{{urls.JoinPath .Site.BaseURL "tags"}}">
+          Tags
+          {{ $tags_count := len .Site.Taxonomies.tags }}
+          {{ if gt $tags_count 0 }}<span class="Counter">{{ $tags_count}}</span>{{ end }}
+        </a>
+        <a class="UnderlineNav-item {{ if eq .Type "categories" }} selected {{ end }}" href="{{urls.JoinPath .Site.BaseURL "categories"}}">
+          Categories
+          {{ $categories_count := len .Site.Taxonomies.categories }}
+          {{ if gt $categories_count 0 }}<span class="Counter">{{ $categories_count}}</span>{{ end }}
+        </a>
+        <div id="header-search-container" class="Header-item flex-auto ml-3" style="align-self: center;">
+          <div
+            class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-0 scoped-search site-scoped-search js-jump-to">
+            <div class="position-relative">
+              <form id="header-search-form" action="" accept-charset="UTF-8" method="get" autocomplete="off" class="d-flex flex-items-center">
+              <label class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center flex-auto">
+                <input type="text" id="search-input" class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable" name="q" value="" placeholder="Search" autocomplete="off">
+                <input type="hidden" id="google-site-input" name="q" value="site:{{ .Site.BaseURL }}" disabled>
+              </label>
+              <select id="search-type-select" class="form-select input-sm ml-2" style="width: auto;">
+                <option value="local" selected>Local</option>
+                <option value="google">Google</option>
+                <option value="bing">Bing</option>
+                <option value="duckduckgo">DuckDuckGo</option>
+              </select>
+            </form>
+            <div id="header-search-results" class="Box Box--overlay d-none position-absolute" style="width: 100%; max-height: 400px; overflow-y: auto; z-index: 100;">
+              <div class="Box-header">
+                <h3 class="Box-title">Search Results</h3>
+              </div>
+              <div id="header-search-results-list">
+              </div>
+              <div id="header-loading-indicator" class="Box-footer text-center" style="display: none;">Loading...</div>
+            </div>
+          </div>
         </div>
-      </div>
+      </nav>
     </div>
     <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
       <a class="Header-link " href="{{ .Site.BaseURL }}">
@@ -67,4 +85,3 @@
     </div>
   </header>
 </div>
-{{ partial "extra/search.html" . }}
