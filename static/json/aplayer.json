@@ -183,42 +183,301 @@
   {
     "name": "Nameless Faces - English Ver.",
     "artist": "HOYO-MiX",
-    "url": "https://data.rdfzsz.eu.org/music/Nameless Faces - English Ver.mp3",
-    "cover": "https://data.rdfzsz.eu.org/music/Nameless Faces.jpg",
-    "lrc": "https://data.rdfzsz.eu.org/music/Nameless Faces - English Ver.lrc"
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/Nameless Faces - English Ver.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/Nameless Faces.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/lrc/Nameless Faces - English Ver.lrc"
   },
   {
     "name": "Nameless Faces - Chinese Ver.",
     "artist": "HOYO-MiX",
-    "url": "https://data.rdfzsz.eu.org/music/Nameless Faces - Chinese Ver.mp3",
-    "cover": "https://data.rdfzsz.eu.org/music/Nameless Faces.jpg",
-    "lrc": "https://data.rdfzsz.eu.org/music/Nameless Faces - Chinese Ver.lrc"
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/Nameless Faces - Chinese Ver.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/Nameless Faces.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/lrc/Nameless Faces - Chinese Ver.lrc"
   },
   {
     "name": "Nameless Faces - Instrumental",
     "artist": "HOYO-MiX",
-    "url": "https://data.rdfzsz.eu.org/music/Nameless Faces - Instrumentalmp3",
-    "cover": "https://data.rdfzsz.eu.org/music/Nameless Faces.jpg"
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/Nameless Faces - Instrumentalmp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/Nameless Faces.jpg"
   },
   {
     "name": "Nameless Faces - English Harmonic Accompaniment",
     "artist": "HOYO-MiX",
-    "url": "https://data.rdfzsz.eu.org/music/Nameless Faces - English Harmonic Accompanimentmp3",
-    "cover": "https://data.rdfzsz.eu.org/music/Nameless Faces.jpg"
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/Nameless Faces - English Harmonic Accompanimentmp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/Nameless Faces.jpg"
   },
   {
     "name": "Nameless Faces - Chinese Harmonic Accompaniment",
     "artist": "HOYO-MiX",
-    "url": "https://data.rdfzsz.eu.org/music/Nameless Faces - Chinese Harmonic Accompanimentmp3",
-    "cover": "https://data.rdfzsz.eu.org/music/Nameless Faces.jpg"
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/Nameless Faces - Chinese Harmonic Accompanimentmp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/Nameless Faces.jpg"
   },
   {
     "name": "Rubia",
     "artist": "周深,HOYO-MiX",
-    "url": "https://data.rdfzsz.eu.org/music/Rubia.mp3",
-    "cover": "https://data.rdfzsz.eu.org/music/Rubia.jpg",
-    "lrc": "https://data.rdfzsz.eu.org/music/Zhou Shen - Rubia.lrc"
+    "url": "https://data.rdfzsz.eu.org/neo/mp3/Rubia.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/cover/Rubia.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/lrc/Zhou Shen - Rubia.lrc"
+  },
+  {
+    "name": "兰音Reine - 比天高",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 比天高.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 比天高.lrc"
+  },
+  {
+    "name": "兰音Reine - 错把风月入墨",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 错把风月入墨.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg"
+  },
+  {
+    "name": "兰音Reine - 好梦歌",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 好梦歌.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg"
+  },
+  {
+    "name": "兰音Reine - 很抱歉",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 很抱歉.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg"
+  },
+  {
+    "name": "兰音Reine - 红烛泪",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 红烛泪.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg"
+  },
+  {
+    "name": "兰音Reine - 形神合一",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg"
+  },
+  {
+    "name": "兰音Reine - 镜中的陌生人",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 镜中的陌生人.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg"
+  },
+  {
+    "name": "兰音Reine - 红烛泪",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 红烛泪.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 红烛泪.lrc"
+  },
+  {
+    "name": "兰音Reine - 破碎时间",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 破碎时间.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg"
+  },
+  {
+    "name": "兰音Reine - 全身而退",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 全身而退.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg"
+  },
+  {
+    "name": "兰音Reine - 暮色浓妆",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 暮色浓妆.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg"
+  },
+  {
+    "name": "兰音Reine - 知夏",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 知夏.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 知夏.lrc"
+  },
+  {
+    "name": "兰音Reine - 哑谜",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 哑谜.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 形神合一.jpg"
+  },
+  {
+    "name": "兰音Reine - 盗墓笔记·十年人间",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 盗墓笔记·十年人间.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 盗墓笔记·十年人间.jpg"
+  },
+  {
+    "name": "兰音Reine - 胡广生",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 胡广生.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 胡广生.jpg"
+  },
+  {
+    "name": "兰音Reine - 寂寞红尘",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 寂寞红尘.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 寂寞红尘.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 寂寞红尘.lrc"
+  },
+  {
+    "name": "兰音Reine - 久别",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 久别.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 久别.jpg"
+  },
+  {
+    "name": "兰音Reine - 兰音Reine",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 兰音Reine.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 兰音Reine.webp"
+  },
+  {
+    "name": "兰音Reine - 莲梦",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 莲梦.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 莲梦.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 莲梦.lrc"
+  },
+  {
+    "name": "兰音Reine - 落（花开花落 日升日没）",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 落（花开花落 日升日没）.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 落（花开花落 日升日没）.webp"
+  },
+  {
+    "name": "兰音Reine - 玫瑰有荆棘也有爱意",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 玫瑰有荆棘也有爱意.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 玫瑰有荆棘也有爱意.webp",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 玫瑰有荆棘也有爱意.lrc"
+  },
+  {
+    "name": "兰音Reine - 栖凰",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 栖凰.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 栖凰.jpg"
+  },
+  {
+    "name": "兰音Reine - 竊竊",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 竊竊.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 竊竊.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 竊竊.lrc"
+  },
+  {
+    "name": "兰音Reine - 求神呐",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 求神呐.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 求神呐.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 求神呐.lrc"
+  },
+  {
+    "name": "兰音Reine - 若是月亮还没来",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 若是月亮还没来.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 若是月亮还没来.jpg"
+  },
+  {
+    "name": "兰音Reine - 盛世",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 盛世.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 盛世.jpg"
+  },
+  {
+    "name": "兰音Reine - 是蝴蝶贪恋那抹花香 - Remix",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 是蝴蝶贪恋那抹花香 - Remix.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 是蝴蝶贪恋那抹花香 - Remix.jpg"
+  },
+  {
+    "name": "兰音Reine - 是蝴蝶贪恋那抹花香",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 是蝴蝶贪恋那抹花香.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 是蝴蝶贪恋那抹花香.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 是蝴蝶贪恋那抹花香.lrc"
+  },
+  {
+    "name": "兰音Reine - 倘若今天就是最后一天",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 倘若今天就是最后一天.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 倘若今天就是最后一天.jpg"
+  },
+  {
+    "name": "兰音Reine - 我肯定见过这道题",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 我肯定见过这道题.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 我肯定见过这道题.jpg"
+  },
+  {
+    "name": "兰音Reine - 无人区野花",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 无人区野花.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 无人区野花.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 无人区野花.lrc"
+  },
+  {
+    "name": "兰音Reine - 一笑",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 一笑.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 一笑.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 一笑.lrc"
+  },
+  {
+    "name": "兰音Reine - 折腰",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 折腰.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 折腰.jpg"
+  },
+  {
+    "name": "兰音Reine - 坠 蝶",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 坠 蝶.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 坠 蝶.jpg"
+  },
+  {
+    "name":"兰音Reine - 坠落 - Dj阿卓版",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 坠落 - Dj阿卓版.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 坠落 - Dj阿卓版.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 坠落 - Dj阿卓版.lrc"
+  },
+  {
+    "name":"兰音Reine - 坠落",
+    "artist": "兰音Reine",
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 坠落.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 坠落.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/兰音Reine - 坠落.lrc"
+  },
+  {
+    "name":"蘭音Reine - 東方人偶",
+    "artist": ”兰音reine“,
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 東方人偶.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 東方人偶.jpg"
+  },
+  {
+    "name":"蘭音Reine - 蓮夢",
+    "artist": ”兰音reine“,
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 蓮夢.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 蓮夢.jpg"
+  },
+  {
+    "name":"蘭音Reine - 醒醒吧，這世上根本沒有魔法",
+    "artist": ”兰音reine“,
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 醒醒吧，這世上根本沒有魔法.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 醒醒吧，這世上根本沒有魔法.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 醒醒吧，這世上根本沒有魔法.lrc"
+  },
+  {
+    "name":"蘭音Reine - 有時候真想從這世上消失",
+    "artist": ”兰音reine“,
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 有時候真想從這世上消失.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 有時候真想從這世上消失.jpg"
+  },
+  {
+    "name":"蘭音Reine - 致命鈴蘭",
+    "artist": ”兰音reine“,
+    "url": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 致命鈴蘭.mp3",
+    "cover": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 致命鈴蘭.jpg",
+    "lrc": "https://data.rdfzsz.eu.org/neo/兰音reine/蘭音Reine - 致命鈴蘭.lrc"
   }
-  
-  
 ]

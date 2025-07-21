@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 html {
   scroll-padding-top: 5em;
 }
@@ -188,4 +194,19 @@ body {
 
 .pinned-item-desc img {
   max-width: 100%;
+}
+
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.border-top.color-border-secondary > div > a:hover img,
+.border-top.color-border-secondary > div > a:hover svg {
+  animation: spin 2s linear infinite;
 }
