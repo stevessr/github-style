@@ -1,0 +1,104 @@
+{{ define "main" }}
+   <div class="container-lg px-3 new-discussion-timeline">
+     <div class="repository-content">
+<style>
+  .post-header {
+    text-align: center;
+    margin-bottom: 1.5rem; /* 增加一点标题和下方内容的间距 */
+  }
+  .friend-links-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem; /* 卡片之间的间距 */
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+  }
+  .friend-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    background-color: var(--color-canvas-subtle);
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-basis: calc(50% - 0.75rem); /* 默认一行两个，减去一半的gap */
+    box-sizing: border-box;
+  }
+  .friend-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--color-shadow-large);
+  }
+  .friend-card img.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.5s ease-in-out; /* 添加过渡效果 */
+  }
+
+  .friend-card:hover img.avatar {
+    transform: rotate(360deg); /* 添加旋转效果 */
+  }
+  .friend-card-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .friend-card-info a {
+    text-decoration: none;
+    color: var(--color-accent-fg);
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  .friend-card-info p {
+    margin: 0.2rem 0 0;
+    font-size: 0.9rem;
+    color: var(--color-fg-muted);
+  }
+  /* 响应式调整：在中等屏幕以下，卡片占满一行 */
+  @media (max-width: 768px) {
+    .friend-card {
+      flex-basis: 100%;
+    }
+  }
+@keyframes rainbow-scroll {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.friend-card:hover .friend-card-info a,
+.friend-card:hover .friend-card-info p {
+  background-image: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text; /* For Safari */
+  color: transparent;
+  animation: rainbow-scroll 4s linear infinite;
+}
+</style>
+
+<div class="post-header">
+  <h1 class="post-title">{{ .Title }}</h1>
+</div>
+<div class="post-content">
+  {{ .Content }}
+
+  {{ if .Site.Params.friend_links.enable }}
+  <ul class="friend-links-container">
+    {{ range .Site.Params.friend_links.links }}
+    <li class="friend-card">
+      <img src="{{ .avatar }}" alt="{{ .name }} avatar" class="avatar">
+      <div class="friend-card-info">
+        <a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .name }}</a>
+        <p>{{ .desc }}</p>
+      </div>
+    </li>
+    {{ end }}
+  </ul>
+  {{ end }}
+</div>
+     </div>
+   </div>
+{{ end }}

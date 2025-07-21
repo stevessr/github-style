@@ -4,8 +4,8 @@
 
 <body>
   {{ partial "header" . }}
-  {{ partial "search.html" .}}
-  {{ block "content" . }}{{ end }}
+  {{ block "main" . }}{{ end }}
+  {{ partial "extra/search.html" . }}
   {{ partial "footer.html" . }}
 </body>
 

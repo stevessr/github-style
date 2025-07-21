@@ -204,48 +204,38 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch((error) => console.error("Error loading search index:", error));
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const draggableContainer = document.getElementById(
-    "draggable-button-container"
-  );
-  let isDragging = false;
-  let offsetX, offsetY;
+dragElement(document.getElementById("draggable-button-container"));
 
-  // 鼠标按下时开始拖动
-  draggableContainer.addEventListener("mousedown", function (event) {
-    if (event.target.tagName === "BUTTON") {
-      // 如果点击的是按钮，则不拖动
-      return;
-    }
-    isDragging = true;
-    offsetX = event.clientX - draggableContainer.getBoundingClientRect().left;
-    offsetY = event.clientY - draggableContainer.getBoundingClientRect().top;
-  });
+function dragElement(elmnt) {
+  let pos1 = 0,
+    pos2 = 0,
+    pos3 = 0,
+    pos4 = 0;
 
-  // 鼠标移动时更新位置
-  document.addEventListener("mousemove", function (event) {
-    if (isDragging) {
-      const x = event.clientX - offsetX;
-      const y = event.clientY - offsetY;
+  if (elmnt) {
+    elmnt.onmousedown = dragMouseDown;
+  }
 
-      // 限制拖动范围在视口内
-      const containerWidth = draggableContainer.offsetWidth;
-      const containerHeight = draggableContainer.offsetHeight;
-      const maxX = window.innerWidth - containerWidth;
-      const maxY = window.innerHeight - containerHeight;
+  function dragMouseDown(e) {
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
 
-      draggableContainer.style.left = `${Math.min(Math.max(x, 0), maxX)}px`;
-      draggableContainer.style.top = `${Math.min(Math.max(y, 0), maxY)}px`;
-    }
-  });
+  function elementDrag(e) {
+    e.preventDefault();
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+    elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+  }
 
-  // 鼠标松开时停止拖动
-  document.addEventListener("mouseup", function () {
-    isDragging = false;
-  });
-
-  // 初始化按钮位置
-  draggableContainer.style.position = "fixed";
-  draggableContainer.style.left = "20px";
-  draggableContainer.style.top = "20px";
-});
+  function closeDragElement() {
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
