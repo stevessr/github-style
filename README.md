@@ -22,11 +22,11 @@ cd themes/github-style
 git pull
 ```
 
-Then, you need to rename the previous `posts` folder to `post`
+Then, if your site uses `post` as the content folder, rename it to `posts` to match this theme's expected section
 
 ```bash
 cd <you-project-folder>
-mv content/posts content/post
+mv content/post content/posts
 ```
 
 ## Setup readme
@@ -49,7 +49,7 @@ pin: true
 Hugo will create a post with `draft: true`, change it to false in order for it to show in the website.
 
 ```
-hugo new post/title_of_the_post.md
+hugo new posts/title_of_the_post.md
 ```
 
 ## Limit display content
