@@ -1,265 +1,314 @@
 .rtl {
-    --q-callout-fold-direction: -1
+  --q-callout-fold-direction: -1;
 }
 
 .callout {
-    padding: 0.75em 0.75em 0.75em 1.25em;
-    border-radius: 8px;
-    border-left: 4px solid transparent;
-    position: relative;
-    margin: 0.75rem 0;
-    /* default background for all callouts */
-    background: var(--callout-bg, rgba(248,250,252,0.6));
-    border: 1px solid var(--callout-border, rgba(0,0,0,0.06));
+  padding: 0.75em 0.75em 0.75em 1.25em;
+  border-radius: 8px;
+  border-left: 4px solid transparent;
+  position: relative;
+  margin: 0.75rem 0;
+  /* default background for all callouts */
+  background: var(--callout-bg, rgba(248, 250, 252, 0.6));
+  border: 1px solid var(--callout-border, rgba(0, 0, 0, 0.06));
 }
 
-.callout>*:last-child {
-    margin-bottom: revert !important
+.callout > *:last-child {
+  margin-bottom: revert !important;
 }
 
 .callout.is-collapsible .callout-title {
-    cursor: pointer
+  cursor: pointer;
 }
 
 .callout .callout-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    font-size: inherit;
-    font-weight: bold
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: inherit;
+  font-weight: bold;
 }
 
-.callout .callout-title-inner{ display:inline-block }
-
-.callout .callout-icon{
-    flex:0 0 auto;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:1.2em;
-    height:1.2em;
+.callout .callout-title-inner {
+  display: inline-block;
 }
-
-.callout .callout-icon svg{ width:1.2em; height:1.2em; color:currentColor }
-
-.callout .callout-title .callout-fold {
-    font-size: small;
-    display: flex;
-    align-items: center;
-    padding-inline-end:8px}
-
-.callout .callout-title .callout-fold .svg-icon {
-    transition: transform 100ms ease-in-out
-}
-
-.callout .callout-title .callout-fold .svg-icon::after {
-    content: "​"
-}
-
-.callout .callout-title .callout-fold.is-collapsed .svg-icon {
-    transform: rotate(calc(var(--q-callout-fold-direction, 1) * -1 * 90deg))
-}
-
-.callout .callout-content {
-    background: rgba(0,0,0,0);
-    overflow: auto;
-    transition: height 100ms cubic-bezier(0.02, 0.01, 0.47, 1)
-}
-
-.callout.is-collapsed .callout-content{
-    height: 0;
-    overflow: hidden;
-    transition: height 180ms ease-in-out, opacity 180ms ease-in-out;
-    opacity: 0;
-}
-
-.callout .callout-content{ opacity: 1 }
 
 .callout .callout-icon {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
 }
 
 .callout .callout-icon svg {
-    width: 1em;
-    height: 1em
+  width: 1.2em;
+  height: 1.2em;
+  color: currentColor;
+}
+
+.callout .callout-title .callout-fold {
+  font-size: small;
+  display: flex;
+  align-items: center;
+  padding-inline-end: 8px;
+}
+
+.callout .callout-title .callout-fold .svg-icon {
+  transition: transform 100ms ease-in-out;
+}
+
+.callout .callout-title .callout-fold .svg-icon::after {
+  content: "​";
+}
+
+.callout .callout-title .callout-fold.is-collapsed .svg-icon {
+  transform: rotate(calc(var(--q-callout-fold-direction, 1) * -1 * 90deg));
+}
+
+.callout > .callout-content,
+.callout .callout-content {
+  background: rgba(0, 0, 0, 0);
+  /* Use max-height for smoother transitions. Use direct-child selector to increase specificity. */
+  max-height: 2000px; /* large enough to contain typical content */
+  overflow: hidden;
+  opacity: 1;
+  padding-top: 0.5rem;
+  will-change: max-height, opacity, padding;
+  transition: max-height 260ms cubic-bezier(0.2, 0, 0, 1),
+    opacity 180ms ease-in-out, padding 180ms ease-in-out;
+}
+
+.callout.is-collapsed > .callout-content,
+.callout.is-collapsed .callout-content {
+  /* Collapsed state: clamp max-height, fade out, and remove vertical padding to avoid blank space */
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  transition: max-height 260ms cubic-bezier(0.2, 0, 0, 1),
+    opacity 140ms ease-in-out, padding 140ms ease-in-out;
+}
+
+/* Defensive: ensure the content is not hidden by display:none from other rules */
+.callout .callout-content[style*="display:"] {
+  /* prefer CSS-managed visibility; inline display may conflict, so do not override inline styles here, but warn in docs if present */
+}
+
+.callout .callout-icon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.callout .callout-icon svg {
+  width: 1em;
+  height: 1em;
 }
 
 .callout .callout-icon::after {
-    content: "​"
+  content: "​";
 }
 
 .callout .lucide {
-    width: 1em;
-    height: 1em;
-    line-height: 1;
-    display: inline-flex;
-    position: relative
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  display: inline-flex;
+  position: relative;
 }
 
 /* Toggle button (nicer) */
-.callout-toggle{
-    margin-left:auto;
-    cursor:pointer;
-    background: transparent;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 999px;
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    color: inherit;
+.callout-toggle {
+  margin-left: auto;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  /* animate background, transform and opacity for smooth feedback */
+  transition: background-color 180ms ease, opacity 140ms ease,
+    transform 160ms ease;
 }
-.callout-toggle:hover{ background: rgba(0,0,0,0.04) }
-.callout .callout-toggle .lucide{ transition: transform 160ms ease }
-.callout.is-collapsed .callout-toggle .lucide{ transform: rotate(-90deg) }
 
-/* callout body spacing */
-.callout .callout-content{ padding-top:0.5rem }
+.callout-toggle:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Icon transitions (chevron) */
+.callout .callout-toggle .lucide {
+  transition: transform 180ms ease, opacity 140ms ease;
+  transform-origin: center;
+}
+
+/* Collapsed state: rotate the icon and slightly dim the toggle */
+.callout.is-collapsed .callout-toggle {
+  background: rgba(0, 0, 0, 0.02);
+  opacity: 0.95;
+}
+
+.callout.is-collapsed .callout-toggle .lucide {
+  transform: rotate(-90deg);
+}
+
+/* Also support styling via aria-expanded attribute for accessibility-aware toggles */
+.callout-toggle[aria-expanded="false"] {
+  opacity: 0.95;
+}
+.callout-toggle[aria-expanded="true"] {
+  opacity: 1;
+}
+
+/* callout body spacing is handled above in the .callout .callout-content block */
 
 /* color mappings (use subtle background + border accent) */
-.callout[data-callout-type=note] {
-    --callout-accent: #086ddd;
-    background: rgba(8,109,221,0.06);
-    border-color: rgba(8,109,221,0.12);
-    color: #075bb5;
+.callout[data-callout-type="note"] {
+  --callout-accent: #086ddd;
+  background: rgba(8, 109, 221, 0.06);
+  border-color: rgba(8, 109, 221, 0.12);
+  color: #075bb5;
 }
 
-.callout[data-callout-type=note] .callout-title .callout-title-inner * {
-    color: #086ddd
+.callout[data-callout-type="note"] .callout-title .callout-title-inner * {
+  color: #086ddd;
 }
 
-.callout[data-callout-type=abstract] {
-    --callout-accent: #00bfbc;
-    background: rgba(0,191,188,0.06);
-    border-color: rgba(0,191,188,0.12);
-    color: #0b8f88;
+.callout[data-callout-type="abstract"] {
+  --callout-accent: #00bfbc;
+  background: rgba(0, 191, 188, 0.06);
+  border-color: rgba(0, 191, 188, 0.12);
+  color: #0b8f88;
 }
 
-.callout[data-callout-type=abstract] .callout-title .callout-title-inner * {
-    color: #00bfbc
+.callout[data-callout-type="abstract"] .callout-title .callout-title-inner * {
+  color: #00bfbc;
 }
 
-.callout[data-callout-type=info] {
-    --callout-accent: #027aff;
-    background: rgba(2,122,255,0.06);
-    border-color: rgba(2,122,255,0.12);
-    color: #0b66d1;
+.callout[data-callout-type="info"] {
+  --callout-accent: #027aff;
+  background: rgba(2, 122, 255, 0.06);
+  border-color: rgba(2, 122, 255, 0.12);
+  color: #0b66d1;
 }
 
-.callout[data-callout-type=info] .callout-title .callout-title-inner * {
-    color: #027aff
+.callout[data-callout-type="info"] .callout-title .callout-title-inner * {
+  color: #027aff;
 }
 
-.callout[data-callout-type=todo] {
-    --callout-accent: #027aff;
-    background: rgba(2,122,255,0.06);
-    border-color: rgba(2,122,255,0.12);
-    color: #0b66d1;
+.callout[data-callout-type="todo"] {
+  --callout-accent: #027aff;
+  background: rgba(2, 122, 255, 0.06);
+  border-color: rgba(2, 122, 255, 0.12);
+  color: #0b66d1;
 }
 
-.callout[data-callout-type=todo] .callout-title .callout-title-inner * {
-    color: #027aff
+.callout[data-callout-type="todo"] .callout-title .callout-title-inner * {
+  color: #027aff;
 }
 
-.callout[data-callout-type=tip] {
-    --callout-accent: #00bfbc;
-    background: rgba(0,191,188,0.06);
-    border-color: rgba(0,191,188,0.12);
-    color: #0b8f88;
+.callout[data-callout-type="tip"] {
+  --callout-accent: #00bfbc;
+  background: rgba(0, 191, 188, 0.06);
+  border-color: rgba(0, 191, 188, 0.12);
+  color: #0b8f88;
 }
 
-.callout[data-callout-type=tip] .callout-title .callout-title-inner * {
-    color: #00bfbc
+.callout[data-callout-type="tip"] .callout-title .callout-title-inner * {
+  color: #00bfbc;
 }
 
-.callout[data-callout-type=success] {
-    --callout-accent: #44cf6e;
-    background: rgba(68,207,110,0.06);
-    border-color: rgba(68,207,110,0.12);
-    color: #2f9f4f;
+.callout[data-callout-type="success"] {
+  --callout-accent: #44cf6e;
+  background: rgba(68, 207, 110, 0.06);
+  border-color: rgba(68, 207, 110, 0.12);
+  color: #2f9f4f;
 }
 
-.callout[data-callout-type=success] .callout-title .callout-title-inner * {
-    color: #44cf6e
+.callout[data-callout-type="success"] .callout-title .callout-title-inner * {
+  color: #44cf6e;
 }
 
-.callout[data-callout-type=question] {
-    --callout-accent: #ec7500;
-    background: rgba(236,117,0,0.06);
-    border-color: rgba(236,117,0,0.12);
-    color: #c56100;
+.callout[data-callout-type="question"] {
+  --callout-accent: #ec7500;
+  background: rgba(236, 117, 0, 0.06);
+  border-color: rgba(236, 117, 0, 0.12);
+  color: #c56100;
 }
 
-.callout[data-callout-type=question] .callout-title .callout-title-inner * {
-    color: #ec7500
+.callout[data-callout-type="question"] .callout-title .callout-title-inner * {
+  color: #ec7500;
 }
 
-.callout[data-callout-type=warning] {
-    --callout-accent: #ec7500;
-    background: rgba(236,117,0,0.06);
-    border-color: rgba(236,117,0,0.12);
-    color: #c56100;
+.callout[data-callout-type="warning"] {
+  --callout-accent: #ec7500;
+  background: rgba(236, 117, 0, 0.06);
+  border-color: rgba(236, 117, 0, 0.12);
+  color: #c56100;
 }
 
-.callout[data-callout-type=warning] .callout-title .callout-title-inner * {
-    color: #ec7500
+.callout[data-callout-type="warning"] .callout-title .callout-title-inner * {
+  color: #ec7500;
 }
 
-.callout[data-callout-type=failure] {
-    --callout-accent: #e93147;
-    background: rgba(233,49,71,0.06);
-    border-color: rgba(233,49,71,0.12);
-    color: #b92539;
+.callout[data-callout-type="failure"] {
+  --callout-accent: #e93147;
+  background: rgba(233, 49, 71, 0.06);
+  border-color: rgba(233, 49, 71, 0.12);
+  color: #b92539;
 }
 
-.callout[data-callout-type=failure] .callout-title .callout-title-inner * {
-    color: #e93147
+.callout[data-callout-type="failure"] .callout-title .callout-title-inner * {
+  color: #e93147;
 }
 
-.callout[data-callout-type=danger] {
-    --callout-accent: #e93147;
-    background: rgba(233,49,71,0.06);
-    border-color: rgba(233,49,71,0.12);
-    color: #b92539;
+.callout[data-callout-type="danger"] {
+  --callout-accent: #e93147;
+  background: rgba(233, 49, 71, 0.06);
+  border-color: rgba(233, 49, 71, 0.12);
+  color: #b92539;
 }
 
-.callout[data-callout-type=danger] .callout-title .callout-title-inner * {
-    color: #e93147
+.callout[data-callout-type="danger"] .callout-title .callout-title-inner * {
+  color: #e93147;
 }
 
-.callout[data-callout-type=bug] {
-    --callout-accent: #e93147;
-    background: rgba(233,49,71,0.06);
-    border-color: rgba(233,49,71,0.12);
-    color: #b92539;
+.callout[data-callout-type="bug"] {
+  --callout-accent: #e93147;
+  background: rgba(233, 49, 71, 0.06);
+  border-color: rgba(233, 49, 71, 0.12);
+  color: #b92539;
 }
 
-.callout[data-callout-type=bug] .callout-title .callout-title-inner * {
-    color: #e93147
+.callout[data-callout-type="bug"] .callout-title .callout-title-inner * {
+  color: #e93147;
 }
 
-.callout[data-callout-type=example] {
-    --callout-accent: #7852ee;
-    background: rgba(120,82,238,0.06);
-    border-color: rgba(120,82,238,0.12);
-    color: #5b3dbf;
+.callout[data-callout-type="example"] {
+  --callout-accent: #7852ee;
+  background: rgba(120, 82, 238, 0.06);
+  border-color: rgba(120, 82, 238, 0.12);
+  color: #5b3dbf;
 }
 
-.callout[data-callout-type=example] .callout-title .callout-title-inner * {
-    color: #7852ee
+.callout[data-callout-type="example"] .callout-title .callout-title-inner * {
+  color: #7852ee;
 }
 
-.callout[data-callout-type=quote] {
-    --callout-accent: #9e9e9e;
-    background: rgba(158,158,158,0.06);
-    border-color: rgba(158,158,158,0.12);
-    color: #777777;
+.callout[data-callout-type="quote"] {
+  --callout-accent: #9e9e9e;
+  background: rgba(158, 158, 158, 0.06);
+  border-color: rgba(158, 158, 158, 0.12);
+  color: #777777;
 }
 
-.callout[data-callout-type=quote] .callout-title .callout-title-inner * {
-    color: #9e9e9e
+.callout[data-callout-type="quote"] .callout-title .callout-title-inner * {
+  color: #9e9e9e;
 }
 
-/*# sourceMappingURL=common_theme_116_7795897f85b453727d7fe8edbfeb92e59a9db923.css.map?__ws=linux.do */
+use {
+  fill: currentcolor;
+}

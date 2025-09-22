@@ -114,21 +114,20 @@
     const potentialCallouts = document.querySelectorAll("blockquote");
     let transformedCount = 0;
 
-    // Iterate backwards to safely replace nodes without disrupting the NodeList
+    // Iterate backwards to safely process nodes without disrupting the NodeList
     for (let i = potentialCallouts.length - 1; i >= 0; i--) {
       const el = potentialCallouts[i];
 
-      // Skip if already processed or part of an existing callout
-      if (processedElements.has(el) || el.closest(".callout")) {
+      // Skip if already processed or part of an existing callout (already nested)
+      if (processedElements.has(el) || el.closest(".callout") && el.tagName === 'BLOCKQUOTE' && el.classList.contains('callout')) {
         continue;
       }
 
       try {
-        const newCallout = createCalloutFromElement(el);
-        if (newCallout) {
-          // Atomically replace the old blockquote with the new callout div
-          el.parentNode.replaceChild(newCallout, el);
+        const isTransformed = createCalloutFromElement(el); // Now returns boolean
+        if (isTransformed) {
           transformedCount++;
+          // No replacement needed as `el` is modified in place.
         }
       } catch (error) {
         console.warn("obsidian-callout: Failed to process an element.", {
@@ -142,36 +141,41 @@
 
   /**
    * Attempts to parse a DOM element (e.g., a blockquote) and transform it into a callout.
-   * @param {HTMLElement} el The element to process.
-   * @returns {HTMLElement|null} A new callout element if successful, otherwise null.
+   * Modifies the element in-place.
+   * @param {HTMLElement} el The element to process (expected to be a blockquote).
+   * @returns {boolean} True if transformed successfully, otherwise false.
    */
   function createCalloutFromElement(el) {
     const markerRegex = /^\s*\[!(\w+)\]([+-])?\s*(.*)/;
-    const firstTextNode = findFirstTextNode(el);
 
-    if (!firstTextNode || !firstTextNode.textContent.includes("[!")) {
-      return null;
+    // We assume the callout marker and title are on the first line of the first <p> element
+    // directly within the blockquote.
+    const firstParagraph = el.querySelector('p');
+    if (!firstParagraph) {
+        return false; // Not a callout if no <p> is found.
     }
 
-    const match = firstTextNode.textContent.match(markerRegex);
+    const firstLineText = firstParagraph.textContent.split('\n')[0];
+    const match = firstLineText.match(markerRegex);
+
     if (!match) {
-      return null;
+      return false;
     }
 
     // Mark the original element as processed to avoid re-running
     processedElements.add(el);
 
     // --- Extract Data ---
-    const [fullMatch, type, collapsibleState, customTitle] = match;
+    const [fullMatchText, type, collapsibleState, rawCustomTitleText] = match;
     const calloutType = type.toLowerCase();
     const isCollapsible = collapsibleState === "+" || collapsibleState === "-";
     const isCollapsed = collapsibleState === "-";
 
-    log("Found callout:", { type: calloutType, title: customTitle, collapsible: isCollapsible });
+    log("Found callout:", { type: calloutType, title: rawCustomTitleText, collapsible: isCollapsible });
 
-    // --- Create Callout Structure (in memory) ---
-    const callout = document.createElement("div");
-    callout.className = "callout";
+    // --- Modify the existing blockquote (`el`) in-place ---
+    const callout = el; // Use the existing blockquote element
+    callout.classList.add("callout");
     callout.dataset.calloutType = calloutType;
 
     if (isCollapsible) {
@@ -181,48 +185,99 @@
       }
     }
 
-    // Create title element
-    const titleText = customTitle.trim() || i18n[calloutType] || calloutType.charAt(0).toUpperCase() + calloutType.slice(1);
-    const titleEl = createTitle(calloutType, titleText, isCollapsible, isCollapsed);
+    // Determine the actual title HTML.
+    const defaultTitleText = i18n[calloutType] || calloutType.charAt(0).toUpperCase() + calloutType.slice(1);
+    let actualTitleHtml = defaultTitleText;
+
+    if (rawCustomTitleText) {
+        // Construct a regex to remove the marker part from the HTML
+        // Example: "[!caution]+ <a href="...">官方网站</a>" -> "<a href="...">官方网站</a>"
+        const markerPartRegex = new RegExp(`^\\s*\\[!${type}\\]([+-])?\\s*`);
+        const firstLineHtml = firstParagraph.innerHTML.split('\n')[0];
+        
+        const extractedHtml = firstLineHtml.replace(markerPartRegex, '').trim();
+        
+        if (extractedHtml) {
+            actualTitleHtml = extractedHtml;
+        } else if (rawCustomTitleText.trim()) { // Fallback to raw text if HTML stripping yielded nothing but text was present
+            actualTitleHtml = rawCustomTitleText.trim();
+        }
+    }
+
+    const titleEl = createTitle(calloutType, actualTitleHtml, isCollapsible, isCollapsed);
 
     // Create content wrapper
     const contentEl = document.createElement("div");
     contentEl.className = "callout-content";
 
-    // Clean the marker from the text node that contained it
-    firstTextNode.textContent = firstTextNode.textContent.replace(fullMatch, "").trimStart();
-
-    // Move all of the original element's children into the new content wrapper
+    // --- Move content into `contentEl` ---
+    // Store original children before clearing the blockquote, so we can iterate them.
+    const originalChildren = Array.from(el.children);
     while (el.firstChild) {
-      contentEl.appendChild(el.firstChild);
+        el.removeChild(el.firstChild);
+    }
+
+    // Append the new title element
+    callout.appendChild(titleEl);
+
+    // Process the first paragraph: extract remaining content (after title line).
+    const firstParagraphHtmlLines = firstParagraph.innerHTML.split('\n');
+    const remainingPContentHtml = firstParagraphHtmlLines.slice(1).join('\n').trim();
+
+    if (remainingPContentHtml) {
+        const tempContentFragment = document.createElement('div');
+        tempContentFragment.innerHTML = remainingPContentHtml;
+        while(tempContentFragment.firstChild) {
+            contentEl.appendChild(tempContentFragment.firstChild);
+        }
+    }
+
+    // Move all original children (which now only exist in `originalChildren` array)
+    // starting from the element *after* `firstParagraph`, into `contentEl`.
+    let foundFirstParagraph = false;
+    for (const child of originalChildren) {
+        if (child === firstParagraph) {
+            foundFirstParagraph = true;
+            // The first paragraph itself will be explicitly removed from the DOM after processing.
+            continue; // Skip the original first paragraph element
+        }
+        if (foundFirstParagraph) {
+            // All subsequent siblings (original children) go directly into contentEl.
+            contentEl.appendChild(child);
+        }
     }
     
-    // Assemble the final callout structure
-    callout.appendChild(titleEl);
+    // Append the content element to the callout.
     callout.appendChild(contentEl);
 
-    return callout;
+    // Remove the original firstParagraph from the DOM if it's still there.
+    // This handles cases where its content might have been fully moved or it was effectively empty.
+    if (firstParagraph.parentNode) {
+        firstParagraph.remove();
+    }
+    
+    return true; // Transformation successful
   }
 
   /**
    * Creates the title element for a callout.
    * @param {string} type - The callout type (e.g., 'note', 'warning').
-   * @param {string} titleText - The text to display in the title.
+   * @param {string} titleHtml - The HTML to display in the title.
    * @param {boolean} isCollapsible - Whether the callout can be collapsed.
    * @param {boolean} isCollapsed - The initial collapsed state.
    * @returns {HTMLElement} The generated title element.
    */
-  function createTitle(type, titleText, isCollapsible, isCollapsed) {
+  function createTitle(type, titleHtml, isCollapsible, isCollapsed) {
     const title = document.createElement("div");
     title.className = "callout-title";
 
     // Icon
     const icon = createIcon(type);
     
-    // Title Text
+    // Title Text (now supports HTML)
     const inner = document.createElement("span");
     inner.className = "callout-title-inner";
-    inner.textContent = titleText;
+    inner.innerHTML = titleHtml; // Use innerHTML for rich titles
 
     title.appendChild(icon);
     title.appendChild(inner);
@@ -308,27 +363,6 @@
       console.warn(`obsidian-callout: Invalid JSON in #${elementId}.`, e);
       return fallback;
     }
-  }
-
-  /**
-   * Finds the first meaningful text node within an element.
-   * @param {Node} node - The node to search within.
-   * @returns {Node|null} The first text node with content, or null.
-   */
-  function findFirstTextNode(node) {
-    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== "") {
-      return node;
-    }
-    for (const child of node.childNodes) {
-      // Do not search inside nested blockquotes
-      if (child.tagName === 'BLOCKQUOTE') continue;
-      
-      const result = findFirstTextNode(child);
-      if (result) {
-        return result;
-      }
-    }
-    return null;
   }
   
   /**
