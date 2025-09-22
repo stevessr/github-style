@@ -32,35 +32,52 @@
     bug: "Bug",
     example: "Example",
     quote: "Quote",
+    abstract: "Abstract",
+    summary: "Summary",
+    tldr: "TLDR",
+    hint: "Hint",
+    check: "Check",
+    done: "Done",
+    faq: "FAQ",
+    caution: "Caution",
+    attention: "Attention",
+    fail: "Fail",
+    missing: "Missing",
+    error: "Error",
+    cite: "Cite",
   });
 
-  // Map callout types to Lucide icon names (for SVG sprite)
+  // Map callout types and aliases to SVG icon IDs from the sprite
   const ICON_MAP = {
-    note: "pencil",
-    info: "info",
-    todo: "check-circle-2",
-    tip: "flame",
-    success: "check-circle",
-    question: "help-circle",
-    warning: "alert-triangle",
-    failure: "x-circle",
-    danger: "zap",
+    // Primary callout types mapped to specific SVG IDs
+    info: "circle-info",
+    tip: "lightbulb",
+    faq: "far-circle-question",
+    question: "far-circle-question",
+    note: "pencil", // No direct 'note' icon, 'pencil' is a good substitute
+    abstract: "book", // Using 'book' for abstract/summarization
+    todo: "list-check", // Specific icon for todo lists
+    success: "circle-check", // Using 'circle-check' for success
+    warning: "triangle-exclamation",
+    failure: "circle-xmark",
+    danger: "bolt",
     bug: "bug",
-    example: "list",
-    quote: "quote",
-    abstract: "clipboard-list",
-    // Aliases
-    summary: "clipboard-list",
-    tldr: "clipboard-list",
-    hint: "flame",
-    done: "check-circle",
-    faq: "help-circle",
-    caution: "alert-triangle",
-    attention: "alert-triangle",
-    fail: "x-circle",
-    missing: "x-circle",
-    error: "zap",
-    cite: "quote",
+    example: "book-open-reader", // Direct match in SVG sprite
+    quote: "quote-left", // Direct match in SVG sprite
+
+    // Aliases mapped directly to the chosen SVG IDs
+    summary: "book",          // Alias for abstract
+    tldr: "book",             // Alias for abstract
+    hint: "lightbulb",        // Alias for tip
+    check: "circle-check",    // Alias for success
+    done: "circle-check",     // Alias for success
+    help: "help-circle",      // Alias for faq
+    caution: "triangle-exclamation", // Alias for warning
+    attention: "triangle-exclamation", // Alias for warning
+    fail: "circle-xmark",     // Alias for failure
+    missing: "circle-xmark",  // Alias for failure
+    error: "bolt",             // Alias for danger
+    cite: "quote-left",       // Alias for quote
   };
 
   // --- Main Initialization ---
@@ -240,9 +257,9 @@
     const iconName = ICON_MAP[type] || 'pencil'; // Default to 'pencil'
 
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("class", "lucide");
+    svg.setAttribute("class", "lucide"); 
     svg.setAttribute("aria-hidden", "true");
-    svg.innerHTML = `<use href="#${iconName}" xlink:href="#obsidian-icon-${iconName}"></use>`;
+    svg.innerHTML = `<use href="#${iconName}" xlink:href="#${iconName}"></use>`;
     
     iconWrap.appendChild(svg);
     return iconWrap;
