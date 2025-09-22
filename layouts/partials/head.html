@@ -17,6 +17,12 @@
     <script type="text/javascript" src="{{ . | absURL }}"></script>
     {{- end }}
 
+    <!-- Obsidian callout CSS -->
+    <link rel="stylesheet" href="{{ "css/obsidian-callout.css" | absURL }}">
+
     <!-- Extended head section-->
     {{ partial "extended_head.html" . }}
+
+    <!-- Inline SVG sprite for icons (used by obsidian-callout) -->
+    {{ partial "symbols.html" . }}
 </head>
