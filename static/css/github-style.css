@@ -228,3 +228,17 @@ html:not([data-wide-mode="true"]) #waline {
     margin-left: auto;
     margin-right: auto;
 }
+.code-block-container {
+  position: relative;
+}
+
+.copy-code-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
