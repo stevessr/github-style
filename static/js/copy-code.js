@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var pre = block.parentNode;
     if (pre.parentNode.classList.contains('highlight')) {
       var highlight = pre.parentNode;
-      highlight.parentNode.insertBefore(button, highlight);
+      highlight.insertBefore(button, highlight.firstChild);
     } else {
       pre.parentNode.insertBefore(button, pre);
     }
