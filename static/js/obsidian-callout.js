@@ -89,6 +89,9 @@
     init();
   }
 
+  // Export init function globally for Swup re-initialization
+  window.initObsidianCallouts = init;
+
   // --- Core Functions ---
 
   /**

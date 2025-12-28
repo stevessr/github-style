@@ -25,6 +25,44 @@ let contributions;
   switchYear(year.toString());
 })();
 
+window.initTheme = function() {
+  setRelativeTime();
+  const dom = document.querySelector('#contributions');
+  if (!dom) {
+    return;
+  }
+
+  // Re-initialize contributions graph if we are on the home page
+  if (dom && !contributions) {
+       contributions = JSON.parse(dom.getAttribute('data'));
+       let year = 0;
+       for (const item of contributions) {
+        item.publishDate = decodeURI(item.publishDate).replace(' ', 'T');
+        item.date = new Date(item.publishDate);
+        if (item.date.getFullYear() > year) {
+           year = item.date.getFullYear();
+        }
+        item.title = decodeURI(item.title);
+       }
+       yearList();
+       switchYear(year.toString());
+  } else if (dom && contributions) {
+      // If contributions already loaded, just re-render
+       let year = 0;
+       for (const item of contributions) {
+        if (item.date.getFullYear() > year) {
+           year = item.date.getFullYear();
+        }
+       }
+       // We might need to clear existing lists to prevent duplication if not handled by innerHTML replacement
+        const yearListEl = document.querySelector('#year-list');
+        if(yearListEl) yearListEl.innerHTML = '';
+
+       yearList();
+       switchYear(year.toString());
+  }
+};
+
 function switchYear(year) {
   let startDate;
   let endDate;

@@ -4,7 +4,9 @@
 
 <body>
   {{ partial "header" . }}
-  {{ block "main" . }}{{ end }}
+  <main id="main-content">
+    {{ block "main" . }}{{ end }}
+  </main>
   {{ partial "extra/search.html" . }}
   {{ partial "footer.html" . }}
 </body>
