@@ -1,9 +1,14 @@
 // Initialize Swup
 const swup = new Swup({
   containers: ["#main-content"],
-  cache: true,
+  cache: false, // Disable cache for debugging
   plugins: [new SwupHeadPlugin()],
   linkSelector: 'a[href^="' + window.location.origin + '"]:not([data-no-swup]), a[href^="/"]:not([data-no-swup]), a[href^="#"]:not([data-no-swup])',
+  ignoreVisit: (url, { el } = {}) => {
+      // Ignore if specifically marked
+      if (el && el.matches('[data-no-swup]')) return true;
+      return false;
+  }
 });
 
 // Enable debug logging
@@ -15,6 +20,18 @@ swup.hooks.on('visit:start', (visit) => {
 });
 swup.hooks.on('visit:end', () => {
     console.log('Swup: Visit ended');
+});
+
+// Log fetched page content to debug container mismatch
+swup.hooks.before('content:replace', (visit, args) => {
+    console.log('Swup: About to replace content');
+    const incomingDoc = visit.to.document;
+    const incomingContainer = incomingDoc.querySelector('#main-content');
+    console.log('Swup: Incoming document:', incomingDoc);
+    console.log('Swup: Incoming container found:', incomingContainer);
+    if (!incomingContainer) {
+        console.error('Swup: #main-content MISSING in incoming HTML. Full HTML:', incomingDoc.documentElement.innerHTML);
+    }
 });
 
 // Re-initialize scripts after content replacement

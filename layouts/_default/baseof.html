@@ -9,9 +9,11 @@
   </main>
   {{ partial "extra/search.html" . }}
   {{ partial "footer.html" . }}
+  <!-- Inline SVG sprite for icons (used by obsidian-callout) -->
+  <div style="display: none;">
+    {{ partial "symbols.html" . }}
+  </div>
+  {{ partial "script.html" . }}
+  {{ partial "script/globalscript.html" . }}
 </body>
-
-{{ partial "script.html" . }}
-{{ partial "script/globalscript.html" . }}
-
 </html>
