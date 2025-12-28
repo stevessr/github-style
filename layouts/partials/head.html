@@ -25,4 +25,17 @@
 
     <!-- Inline SVG sprite for icons (used by obsidian-callout) -->
     {{ partial "symbols.html" . }}
+
+    <!-- PWA -->
+    <link rel="manifest" href="{{ "manifest.json" | absURL }}">
+    <meta name="theme-color" content="#1e2327">
+    <link rel="apple-touch-icon" href="{{ "images/avatar.gif" | absURL }}">
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('{{ "sw.js" | absURL }}');
+        });
+      }
+    </script>
 </head>
