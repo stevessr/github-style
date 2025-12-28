@@ -2,8 +2,19 @@
 const swup = new Swup({
   containers: ["#main-content"],
   cache: true,
-  plugins: [],
+  plugins: [new SwupHeadPlugin()],
   linkSelector: 'a[href^="' + window.location.origin + '"]:not([data-no-swup]), a[href^="/"]:not([data-no-swup]), a[href^="#"]:not([data-no-swup])',
+});
+
+// Enable debug logging
+swup.hooks.before('link:click', (visit) => {
+    console.log('Swup: Link clicked', visit.trigger.el.href);
+});
+swup.hooks.on('visit:start', (visit) => {
+    console.log('Swup: Visit started', visit.to.url);
+});
+swup.hooks.on('visit:end', () => {
+    console.log('Swup: Visit ended');
 });
 
 // Re-initialize scripts after content replacement
