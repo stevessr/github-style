@@ -100,11 +100,27 @@
   cursor: pointer;
   font-size: 13px;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .custom-audio-player__icon-btn:hover {
   border-color: var(--player-accent);
   color: var(--player-accent);
+}
+
+.custom-audio-player__icon-btn--icon {
+  width: 34px;
+  min-width: 34px;
+  padding: 0;
+}
+
+.custom-audio-player__btn-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: currentColor;
 }
 
 .custom-audio-player__cover-box {

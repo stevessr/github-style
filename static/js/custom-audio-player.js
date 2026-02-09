@@ -11,6 +11,18 @@
   const PLACEHOLDER_COVER = `data:image/svg+xml,${encodeURIComponent(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#79c0ff"/><stop offset="1" stop-color="#1f6feb"/></linearGradient></defs><rect width="160" height="160" fill="url(#g)"/><circle cx="80" cy="66" r="26" fill="rgba(255,255,255,0.9)"/><rect x="42" y="104" width="76" height="12" rx="6" fill="rgba(255,255,255,0.92)"/><rect x="54" y="124" width="52" height="10" rx="5" fill="rgba(255,255,255,0.78)"/></svg>'
   )}`;
+  const ICONS = {
+    prev: '<svg class="custom-audio-player__btn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM18 6v12l-8-6z"/></svg>',
+    next: '<svg class="custom-audio-player__btn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM6 6v12l8-6z"/></svg>',
+    play: '<svg class="custom-audio-player__btn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6v12l10-6z"/></svg>',
+    pause: '<svg class="custom-audio-player__btn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h3v12H8zm5 0h3v12h-3z"/></svg>',
+    collapse:
+      '<svg class="custom-audio-player__btn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.29 6.71 13.58 11l-4.29 4.29 1.42 1.42L16.41 11l-5.7-5.71z"/></svg>',
+  };
+
+  function icon(name) {
+    return ICONS[name] || "";
+  }
 
   function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
@@ -180,9 +192,18 @@
                 <p class="custom-audio-player__artist">请稍候</p>
               </div>
               <div class="custom-audio-player__controls">
-                <button type="button" class="custom-audio-player__icon-btn" data-action="prev" title="上一首">⏮</button>
-                <button type="button" class="custom-audio-player__icon-btn custom-audio-player__play" data-action="toggle-play" title="播放">▶</button>
-                <button type="button" class="custom-audio-player__icon-btn" data-action="next" title="下一首">⏭</button>
+                <button type="button" class="custom-audio-player__icon-btn custom-audio-player__icon-btn--icon" data-action="prev" title="上一首">${icon(
+                  "prev"
+                )}</button>
+                <button type="button" class="custom-audio-player__icon-btn custom-audio-player__icon-btn--icon custom-audio-player__play" data-action="toggle-play" title="播放">${icon(
+                  "play"
+                )}</button>
+                <button type="button" class="custom-audio-player__icon-btn custom-audio-player__icon-btn--icon" data-action="next" title="下一首">${icon(
+                  "next"
+                )}</button>
+                <button type="button" class="custom-audio-player__icon-btn custom-audio-player__icon-btn--icon" data-action="collapse" title="收起播放器">${icon(
+                  "collapse"
+                )}</button>
                 <button type="button" class="custom-audio-player__icon-btn custom-audio-player__loop" data-action="loop" title="循环：全部">循环：全部</button>
               </div>
               <label class="custom-audio-player__volume" title="音量">
@@ -262,7 +283,11 @@
       });
 
       this.elements.toggleList.addEventListener("click", () => {
-        this.setPanelOpen(this.elements.panel.hidden);
+        if (this.elements.panel.hidden) {
+          this.setPanelOpen(true);
+          return;
+        }
+        this.setDocked(false);
       });
 
       this.elements.controls.addEventListener("click", (event) => {
@@ -281,6 +306,10 @@
         }
         if (action === "toggle-play") {
           this.togglePlay();
+          return;
+        }
+        if (action === "collapse") {
+          this.setDocked(false);
           return;
         }
         if (action === "loop") {
@@ -605,10 +634,10 @@
 
     updatePlayButton() {
       if (this.elements.audio.paused) {
-        this.elements.playButton.textContent = "▶";
+        this.elements.playButton.innerHTML = icon("play");
         this.elements.playButton.title = "播放";
       } else {
-        this.elements.playButton.textContent = "⏸";
+        this.elements.playButton.innerHTML = icon("pause");
         this.elements.playButton.title = "暂停";
       }
     }
