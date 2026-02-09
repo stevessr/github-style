@@ -1,64 +1,11 @@
 {{ if .Site.Params.Comment }}
 <!--上级 globalscript.html-->
 {{ end }} {{ if .Site.Params.enableAplayer }}
-<script
-  src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"
-  integrity="sha256-6Y7CJDaltoeNgk+ZftgCD9jLgmGv4xKUo8nQ0HgAwVo="
-  crossorigin="anonymous"
-></script>
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"
-  integrity="sha256-uqQQGnDcmRKvhKwc5Vm4XT1GQ2oV6t1U0NR2N9tV+BQ="
-  crossorigin="anonymous"
-/>
-<div id="APlayer-c"></div>
-
-{{ if eq .Site.Params.AplayerSetting.mode "json" }} 
-
-{{ if.Site.Params.AplayerSetting.jsonurl}} 
-<script>
-fetch('{{ .Site.Params.AplayerSetting.jsonurl }}')
-    .then((response) => response.json())
-    .then((audioData) => {
-      console.log(audioData);
-      var ap1 = new APlayer({
-        container: document.getElementById("APlayer-c"),
-        fixed: true,
-        mutex: true,
-        listFolded: false,
-        listMaxHeight: 90,
-        autoplay: false,
-        loop: "all",
-        lrcType: 3,
-        audio: audioData, // 从 JSON 加载的音频数据
-      });
-    })
-    .catch((error) => {
-      console.error("Failed to load audio data:", error);
-    });
-</script>
-{{ else }}
-<script>
-  // 动态加载 JSON 数据
-  fetch('{{ "json/aplayer.json" | absURL }}')
-    .then((response) => response.json())
-    .then((audioData) => {
-      console.log(audioData);
-      var ap1 = new APlayer({
-        container: document.getElementById("APlayer-c"),
-        fixed: true,
-        mutex: true,
-        listFolded: false,
-        listMaxHeight: 90,
-        autoplay: false,
-        loop: "all",
-        lrcType: 3,
-        audio: audioData, // 从 JSON 加载的音频数据
-      });
-    })
-    .catch((error) => {
-      console.error("Failed to load audio data:", error);
-    });
-</script>
-{{end}} {{ end }} {{ end }}
+{{ $playlistSource := "json/aplayer.json" | absURL }}
+{{ if and (eq .Site.Params.AplayerSetting.mode "json") .Site.Params.AplayerSetting.jsonurl }}
+{{ $playlistSource = .Site.Params.AplayerSetting.jsonurl }}
+{{ end }}
+<link rel="stylesheet" href='{{ "css/custom-audio-player.css" | absURL }}' />
+<div id="APlayer-c" data-custom-audio-player-root="true" data-source="{{ $playlistSource }}"></div>
+<script type="application/javascript" src='{{ "js/custom-audio-player.js" | absURL }}'></script>
+{{ end }}
