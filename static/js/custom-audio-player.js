@@ -186,6 +186,7 @@
       this.bindEvents();
       this.updateLoopButton();
       this.setDocked(false);
+      this.setFloatingLyric("暂无歌词", "");
       this.syncThemeMode();
       this.watchThemeMode();
       this.setVolume(0.75);
@@ -243,35 +244,33 @@
             <button type="button" class="custom-audio-player__progress-track" aria-label="播放进度">
               <span class="custom-audio-player__progress-current"></span>
             </button>
-            <div class="custom-audio-player__panel" hidden>
-              <div class="custom-audio-player__panel-top">
-                <input type="search" class="custom-audio-player__search" placeholder="搜索歌名 / 歌手" />
-                <span class="custom-audio-player__counter">0 / 0</span>
-                <button type="button" class="custom-audio-player__icon-btn custom-audio-player__locate-current">定位当前</button>
-              </div>
-              <div class="custom-audio-player__status" role="status" aria-live="polite"></div>
-              <div class="custom-audio-player__panel-main">
-                <div class="custom-audio-player__list-viewport" tabindex="0">
-                  <div class="custom-audio-player__list-items"></div>
-                </div>
-                <aside class="custom-audio-player__lyric">
-                  <h4 class="custom-audio-player__lyric-title">歌词</h4>
-                  <div class="custom-audio-player__lyric-viewport" tabindex="0">
-                    <ol class="custom-audio-player__lyric-lines">
-                      <li class="custom-audio-player__lyric-line is-placeholder is-active">暂无歌词</li>
-                    </ol>
-                  </div>
-                </aside>
-              </div>
-            </div>
           </section>
         </div>
+        <section class="custom-audio-player__panel custom-audio-player__floating-list" hidden>
+          <div class="custom-audio-player__panel-top">
+            <input type="search" class="custom-audio-player__search" placeholder="搜索歌名 / 歌手" />
+            <span class="custom-audio-player__counter">0 / 0</span>
+            <button type="button" class="custom-audio-player__icon-btn custom-audio-player__locate-current">定位当前</button>
+            <button type="button" class="custom-audio-player__icon-btn custom-audio-player__close-list" title="关闭歌单">关闭</button>
+          </div>
+          <div class="custom-audio-player__status" role="status" aria-live="polite"></div>
+          <div class="custom-audio-player__panel-main">
+            <div class="custom-audio-player__list-viewport" tabindex="0">
+              <div class="custom-audio-player__list-items"></div>
+            </div>
+          </div>
+        </section>
+        <section class="custom-audio-player__floating-lyric" hidden aria-live="polite">
+          <p class="custom-audio-player__floating-lyric-current">暂无歌词</p>
+          <p class="custom-audio-player__floating-lyric-next"></p>
+        </section>
       `;
     }
 
     cacheElements() {
       const host = this.root.querySelector(".custom-audio-player-host");
       const player = this.root.querySelector(".custom-audio-player");
+      const panel = this.root.querySelector(".custom-audio-player__floating-list");
       this.elements = {
         host,
         player,
@@ -288,15 +287,17 @@
         time: player.querySelector(".custom-audio-player__time"),
         progressTrack: player.querySelector(".custom-audio-player__progress-track"),
         progressCurrent: player.querySelector(".custom-audio-player__progress-current"),
-        panel: player.querySelector(".custom-audio-player__panel"),
-        search: player.querySelector(".custom-audio-player__search"),
-        counter: player.querySelector(".custom-audio-player__counter"),
-        status: player.querySelector(".custom-audio-player__status"),
-        locateCurrent: player.querySelector(".custom-audio-player__locate-current"),
-        listViewport: player.querySelector(".custom-audio-player__list-viewport"),
-        listItems: player.querySelector(".custom-audio-player__list-items"),
-        lyricViewport: player.querySelector(".custom-audio-player__lyric-viewport"),
-        lyricLines: player.querySelector(".custom-audio-player__lyric-lines"),
+        panel,
+        search: panel.querySelector(".custom-audio-player__search"),
+        counter: panel.querySelector(".custom-audio-player__counter"),
+        status: panel.querySelector(".custom-audio-player__status"),
+        locateCurrent: panel.querySelector(".custom-audio-player__locate-current"),
+        closeList: panel.querySelector(".custom-audio-player__close-list"),
+        listViewport: panel.querySelector(".custom-audio-player__list-viewport"),
+        listItems: panel.querySelector(".custom-audio-player__list-items"),
+        floatingLyric: this.root.querySelector(".custom-audio-player__floating-lyric"),
+        floatingLyricCurrent: this.root.querySelector(".custom-audio-player__floating-lyric-current"),
+        floatingLyricNext: this.root.querySelector(".custom-audio-player__floating-lyric-next"),
       };
     }
 
@@ -306,17 +307,20 @@
       });
 
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && this.isDockedOpen) {
+        if (event.key !== "Escape") {
+          return;
+        }
+        if (!this.elements.panel.hidden) {
+          this.setPanelOpen(false);
+          return;
+        }
+        if (this.isDockedOpen) {
           this.setDocked(false);
         }
       });
 
       this.elements.toggleList.addEventListener("click", () => {
-        if (this.elements.panel.hidden) {
-          this.setPanelOpen(true);
-          return;
-        }
-        this.setDocked(false);
+        this.setPanelOpen(this.elements.panel.hidden);
       });
 
       this.elements.controls.addEventListener("click", (event) => {
@@ -360,6 +364,10 @@
 
       this.elements.locateCurrent.addEventListener("click", () => {
         this.scrollToCurrent();
+      });
+
+      this.elements.closeList.addEventListener("click", () => {
+        this.setPanelOpen(false);
       });
 
       this.elements.listItems.addEventListener("click", (event) => {
@@ -432,11 +440,7 @@
     }
 
     setPanelOpen(open) {
-      if (open) {
-        this.setDocked(true);
-      }
       this.elements.panel.hidden = !open;
-      this.elements.player.dataset.open = open ? "true" : "false";
       this.elements.toggleList.setAttribute("aria-expanded", open ? "true" : "false");
       this.elements.toggleList.textContent = open ? "收起" : "歌单";
       if (open) {
@@ -453,15 +457,13 @@
       );
       this.elements.edgeHandle.textContent = this.isDockedOpen ? "收起" : "音乐";
       this.elements.edgeHandle.title = this.isDockedOpen ? "收起播放器" : "展开播放器";
-
-      if (!this.isDockedOpen && !this.elements.panel.hidden) {
-        this.setPanelOpen(false);
-      }
     }
 
     syncThemeMode() {
       const mode = document.documentElement.getAttribute("data-color-mode");
-      this.elements.host.dataset.theme = mode === "dark" ? "dark" : "light";
+      const theme = mode === "dark" ? "dark" : "light";
+      this.elements.host.dataset.theme = theme;
+      this.root.dataset.theme = theme;
     }
 
     watchThemeMode() {
@@ -752,7 +754,7 @@
     async loadLyric(track) {
       this.lyrics = [];
       this.lyricCursor = -1;
-      this.renderLyricPlaceholder(track.lrc ? "正在加载歌词..." : "暂无歌词");
+      this.setFloatingLyric(track.lrc ? "正在加载歌词..." : "暂无歌词", "");
 
       if (!track.lrc) {
         return;
@@ -772,86 +774,27 @@
         }
         const parsed = parseLrc(raw);
         if (!parsed.length) {
-          this.renderLyricPlaceholder("歌词格式不受支持");
+          this.setFloatingLyric("歌词格式不受支持", "");
           return;
         }
         this.lyrics = parsed;
-        this.renderLyricLines();
-        this.syncLyric();
+        this.syncLyric(true);
       } catch (error) {
         if (this.lyricToken !== token) {
           return;
         }
         console.error("[custom-audio-player] failed to load lyric:", error);
-        this.renderLyricPlaceholder("歌词加载失败");
+        this.setFloatingLyric("歌词加载失败", "");
       }
     }
 
-    renderLyricPlaceholder(message) {
-      const text = normalizeText(message) || "暂无歌词";
-      this.elements.lyricLines.innerHTML = `<li class="custom-audio-player__lyric-line is-placeholder is-active">${escapeHTML(
-        text
-      )}</li>`;
-      this.elements.lyricViewport.scrollTop = 0;
+    setFloatingLyric(currentLine, nextLine) {
+      this.elements.floatingLyric.hidden = false;
+      this.elements.floatingLyricCurrent.textContent = normalizeText(currentLine) || " ";
+      this.elements.floatingLyricNext.textContent = normalizeText(nextLine);
     }
 
-    renderLyricLines() {
-      if (!this.lyrics.length) {
-        this.renderLyricPlaceholder("暂无歌词");
-        return;
-      }
-
-      const markup = this.lyrics
-        .map((line, index) => {
-          const hasText = normalizeText(line.text);
-          const text = hasText ? escapeHTML(line.text) : "&nbsp;";
-          const activeClass = index === 0 ? " is-active" : "";
-          return `<li class="custom-audio-player__lyric-line${activeClass}" data-lyric-index="${index}">${text}</li>`;
-        })
-        .join("");
-
-      this.elements.lyricLines.innerHTML = markup;
-      this.elements.lyricViewport.scrollTop = 0;
-    }
-
-    setActiveLyric(index) {
-      const active = this.elements.lyricLines.querySelector(
-        ".custom-audio-player__lyric-line.is-active"
-      );
-      if (active) {
-        active.classList.remove("is-active");
-      }
-
-      if (!this.lyrics.length) {
-        return;
-      }
-
-      const targetIndex = index < 0 ? 0 : index;
-      const target = this.elements.lyricLines.querySelector(
-        `.custom-audio-player__lyric-line[data-lyric-index="${targetIndex}"]`
-      );
-      if (!target) {
-        return;
-      }
-      target.classList.add("is-active");
-      this.scrollLyricIntoView(target);
-    }
-
-    scrollLyricIntoView(element) {
-      if (!element) {
-        return;
-      }
-
-      const viewport = this.elements.lyricViewport;
-      const targetTop =
-        element.offsetTop - viewport.clientHeight / 2 + element.offsetHeight / 2;
-      viewport.scrollTo({
-        top: Math.max(0, targetTop),
-        behavior: "smooth",
-      });
-    }
-
-    syncLyric() {
+    syncLyric(force) {
       if (!this.lyrics.length) {
         return;
       }
@@ -871,11 +814,17 @@
         }
       }
 
-      if (match === this.lyricCursor) {
+      if (!force && match === this.lyricCursor) {
         return;
       }
       this.lyricCursor = match;
-      this.setActiveLyric(match);
+      if (match === -1) {
+        this.setFloatingLyric(this.lyrics[0] ? this.lyrics[0].text : " ", this.lyrics[1] ? this.lyrics[1].text : "");
+        return;
+      }
+      const current = this.lyrics[match];
+      const next = this.lyrics[match + 1];
+      this.setFloatingLyric(current ? current.text : " ", next ? next.text : "");
     }
 
     showStatus(message) {
