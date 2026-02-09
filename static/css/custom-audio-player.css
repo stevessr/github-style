@@ -25,6 +25,7 @@
   --player-accent-soft: rgba(9, 105, 218, 0.15);
   width: min(980px, calc(100vw - 66px));
   margin-right: 50px;
+  position: relative;
   pointer-events: auto;
   border: 1px solid var(--player-border);
   border-radius: 14px;
