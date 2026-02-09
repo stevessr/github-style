@@ -1,9 +1,10 @@
 (() => {
   const ROOT_SELECTOR = '[data-custom-audio-player-root="true"]';
-  const LOOP_STATES = ["all", "one", "off"];
+  const LOOP_STATES = ["all", "one", "random", "off"];
   const LOOP_LABELS = {
     all: "循环：全部",
     one: "循环：单曲",
+    random: "循环：随机",
     off: "循环：关闭",
   };
   const PLACEHOLDER_COVER = `data:image/svg+xml,${encodeURIComponent(
@@ -609,6 +610,12 @@
         return;
       }
 
+      if (this.loopMode === "random") {
+        const target = this.getRandomTrackIndex(this.currentIndex);
+        this.selectTrack(target, { autoplay: true });
+        return;
+      }
+
       if (this.currentIndex < this.tracks.length - 1) {
         this.selectTrack(this.currentIndex + 1, { autoplay: true });
         return;
@@ -627,8 +634,31 @@
       if (!this.tracks.length) {
         return;
       }
+
+      if (this.loopMode === "random") {
+        const target = this.getRandomTrackIndex(this.currentIndex);
+        this.selectTrack(target, { autoplay: true });
+        return;
+      }
+
       const target = this.currentIndex > 0 ? this.currentIndex - 1 : this.tracks.length - 1;
       this.selectTrack(target, { autoplay: true });
+    }
+
+    getRandomTrackIndex(excludeIndex) {
+      if (!this.tracks.length) {
+        return -1;
+      }
+      if (this.tracks.length === 1) {
+        return 0;
+      }
+
+      const current = Number.isInteger(excludeIndex) ? excludeIndex : -1;
+      let next = current;
+      while (next === current) {
+        next = Math.floor(Math.random() * this.tracks.length);
+      }
+      return next;
     }
 
     handleEnded() {
