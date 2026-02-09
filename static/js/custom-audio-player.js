@@ -255,8 +255,11 @@
                 </div>
                 <aside class="custom-audio-player__lyric">
                   <h4 class="custom-audio-player__lyric-title">歌词</h4>
-                  <p class="custom-audio-player__lyric-current">暂无歌词</p>
-                  <p class="custom-audio-player__lyric-next"></p>
+                  <div class="custom-audio-player__lyric-viewport" tabindex="0">
+                    <ol class="custom-audio-player__lyric-lines">
+                      <li class="custom-audio-player__lyric-line is-placeholder is-active">暂无歌词</li>
+                    </ol>
+                  </div>
                 </aside>
               </div>
             </div>
@@ -291,8 +294,8 @@
         locateCurrent: player.querySelector(".custom-audio-player__locate-current"),
         listViewport: player.querySelector(".custom-audio-player__list-viewport"),
         listItems: player.querySelector(".custom-audio-player__list-items"),
-        lyricCurrent: player.querySelector(".custom-audio-player__lyric-current"),
-        lyricNext: player.querySelector(".custom-audio-player__lyric-next"),
+        lyricViewport: player.querySelector(".custom-audio-player__lyric-viewport"),
+        lyricLines: player.querySelector(".custom-audio-player__lyric-lines"),
       };
     }
 
@@ -719,8 +722,7 @@
     async loadLyric(track) {
       this.lyrics = [];
       this.lyricCursor = -1;
-      this.elements.lyricCurrent.textContent = track.lrc ? "正在加载歌词..." : "暂无歌词";
-      this.elements.lyricNext.textContent = "";
+      this.renderLyricPlaceholder(track.lrc ? "正在加载歌词..." : "暂无歌词");
 
       if (!track.lrc) {
         return;
@@ -740,20 +742,83 @@
         }
         const parsed = parseLrc(raw);
         if (!parsed.length) {
-          this.elements.lyricCurrent.textContent = "歌词格式不受支持";
-          this.elements.lyricNext.textContent = "";
+          this.renderLyricPlaceholder("歌词格式不受支持");
           return;
         }
         this.lyrics = parsed;
+        this.renderLyricLines();
         this.syncLyric();
       } catch (error) {
         if (this.lyricToken !== token) {
           return;
         }
         console.error("[custom-audio-player] failed to load lyric:", error);
-        this.elements.lyricCurrent.textContent = "歌词加载失败";
-        this.elements.lyricNext.textContent = "";
+        this.renderLyricPlaceholder("歌词加载失败");
       }
+    }
+
+    renderLyricPlaceholder(message) {
+      const text = normalizeText(message) || "暂无歌词";
+      this.elements.lyricLines.innerHTML = `<li class="custom-audio-player__lyric-line is-placeholder is-active">${escapeHTML(
+        text
+      )}</li>`;
+      this.elements.lyricViewport.scrollTop = 0;
+    }
+
+    renderLyricLines() {
+      if (!this.lyrics.length) {
+        this.renderLyricPlaceholder("暂无歌词");
+        return;
+      }
+
+      const markup = this.lyrics
+        .map((line, index) => {
+          const hasText = normalizeText(line.text);
+          const text = hasText ? escapeHTML(line.text) : "&nbsp;";
+          const activeClass = index === 0 ? " is-active" : "";
+          return `<li class="custom-audio-player__lyric-line${activeClass}" data-lyric-index="${index}">${text}</li>`;
+        })
+        .join("");
+
+      this.elements.lyricLines.innerHTML = markup;
+      this.elements.lyricViewport.scrollTop = 0;
+    }
+
+    setActiveLyric(index) {
+      const active = this.elements.lyricLines.querySelector(
+        ".custom-audio-player__lyric-line.is-active"
+      );
+      if (active) {
+        active.classList.remove("is-active");
+      }
+
+      if (!this.lyrics.length) {
+        return;
+      }
+
+      const targetIndex = index < 0 ? 0 : index;
+      const target = this.elements.lyricLines.querySelector(
+        `.custom-audio-player__lyric-line[data-lyric-index="${targetIndex}"]`
+      );
+      if (!target) {
+        return;
+      }
+      target.classList.add("is-active");
+      this.scrollLyricIntoView(target);
+    }
+
+    scrollLyricIntoView(element) {
+      if (!element) {
+        return;
+      }
+
+      const viewport = this.elements.lyricViewport;
+      const targetTop =
+        element.offsetTop - viewport.clientHeight / 2 + element.offsetHeight / 2;
+      viewport.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: "smooth",
+      });
     }
 
     syncLyric() {
@@ -780,17 +845,7 @@
         return;
       }
       this.lyricCursor = match;
-
-      if (match === -1) {
-        this.elements.lyricCurrent.textContent = this.lyrics[0].text || " ";
-        this.elements.lyricNext.textContent = this.lyrics[1] ? this.lyrics[1].text : "";
-        return;
-      }
-
-      const current = this.lyrics[match];
-      const next = this.lyrics[match + 1];
-      this.elements.lyricCurrent.textContent = current ? current.text : "";
-      this.elements.lyricNext.textContent = next ? next.text : "";
+      this.setActiveLyric(match);
     }
 
     showStatus(message) {
