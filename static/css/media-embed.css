@@ -1,0 +1,60 @@
+.markdown-body .auto-embed {
+  margin: 1.1rem 0 1.3rem;
+}
+
+.markdown-body .auto-embed__frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-border-default, #d0d7de);
+  border-radius: 12px;
+  background: var(--color-canvas-subtle, #f6f8fa);
+  box-shadow: 0 8px 18px rgba(31, 35, 40, 0.12);
+}
+
+.markdown-body .auto-embed--youtube .auto-embed__frame,
+.markdown-body .auto-embed--bilibili .auto-embed__frame {
+  padding-top: 56.25%;
+}
+
+.markdown-body .auto-embed--spotify .auto-embed__frame {
+  height: var(--embed-height, 352px);
+}
+
+.markdown-body .auto-embed__frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #000;
+}
+
+.markdown-body .auto-embed--spotify .auto-embed__frame iframe {
+  background: transparent;
+}
+
+.markdown-body .auto-embed__caption {
+  margin-top: 0.45rem;
+  color: var(--color-fg-muted, #57606a);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.markdown-body .auto-embed__summary {
+  margin: 0 0 0.35rem;
+  color: var(--color-fg-default, #1f2328);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  .markdown-body .auto-embed__frame {
+    border-radius: 10px;
+  }
+
+  .markdown-body .auto-embed__caption {
+    font-size: 11px;
+  }
+}

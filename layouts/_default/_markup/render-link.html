@@ -1,0 +1,62 @@
+{{- $destination := .Destination | strings.TrimSpace -}}
+{{- $href := $destination | safeURL -}}
+{{- $provider := "" -}}
+{{- $embedSrc := "" -}}
+{{- $embedHeight := "" -}}
+
+{{- if strings.HasPrefix (lower $destination) "http" -}}
+  {{- $youtubeRegex := `(?i)^https?://(?:www\.|m\.)?(?:youtube\.com/(?:watch\?[^#\s]*v=|shorts/|live/|embed/|v/)|youtu\.be/|youtube-nocookie\.com/embed/)([A-Za-z0-9_-]{6,}).*$` -}}
+  {{- $youtubeID := replaceRE $youtubeRegex "$1" $destination -}}
+  {{- if ne $youtubeID $destination -}}
+    {{- $provider = "youtube" -}}
+    {{- $embedSrc = printf "https://www.youtube.com/embed/%s" $youtubeID -}}
+  {{- end -}}
+
+  {{- if eq $provider "" -}}
+    {{- $bvid := replaceRE `(?i)^.*?(BV[0-9A-Za-z]{10}).*$` "$1" $destination -}}
+    {{- $avid := replaceRE `(?i)^.*(?:av|aid=)([0-9]+).*$` "$1" $destination -}}
+    {{- $page := "1" -}}
+    {{- $pageCandidate := replaceRE `(?i)^.*(?:[?&]p=)([0-9]+).*$` "$1" $destination -}}
+    {{- if ne $pageCandidate $destination -}}
+      {{- $page = $pageCandidate -}}
+    {{- end -}}
+
+    {{- if ne $bvid $destination -}}
+      {{- $provider = "bilibili" -}}
+      {{- $embedSrc = printf "https://player.bilibili.com/player.html?bvid=%s&page=%s&high_quality=1" $bvid $page -}}
+    {{- else if ne $avid $destination -}}
+      {{- $provider = "bilibili" -}}
+      {{- $embedSrc = printf "https://player.bilibili.com/player.html?aid=%s&page=%s&high_quality=1" $avid $page -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if eq $provider "" -}}
+    {{- $spotifyRegex := `(?i)^https?://(?:open\.)?spotify\.com/(?:intl-[a-z]{2}/)?(track|album|playlist|episode|show|artist)/([A-Za-z0-9]+).*$` -}}
+    {{- $spotifyType := replaceRE $spotifyRegex "$1" $destination -}}
+    {{- $spotifyID := replaceRE $spotifyRegex "$2" $destination -}}
+    {{- if and (ne $spotifyType $destination) (ne $spotifyID $destination) -}}
+      {{- $provider = "spotify" -}}
+      {{- $spotifyType = lower $spotifyType -}}
+      {{- $embedSrc = printf "https://open.spotify.com/embed/%s/%s?utm_source=generator" $spotifyType $spotifyID -}}
+      {{- if eq $spotifyType "track" -}}
+        {{- $embedHeight = "152" -}}
+      {{- else if eq $spotifyType "episode" -}}
+        {{- $embedHeight = "232" -}}
+      {{- else -}}
+        {{- $embedHeight = "352" -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+<a
+  href="{{ $href }}"
+  {{- with .Title }} title="{{ . }}"{{- end -}}
+  {{- if strings.HasPrefix (lower $destination) "http" }} target="_blank" rel="noopener noreferrer"{{- end -}}
+  {{- if ne $provider "" }}
+    class="js-auto-embed-link"
+    data-embed-provider="{{ $provider }}"
+    data-embed-src="{{ $embedSrc }}"
+    {{- with $embedHeight }} data-embed-height="{{ . }}"{{- end -}}
+  {{- end -}}
+>{{ .Text | safeHTML }}</a>
