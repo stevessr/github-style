@@ -1,11 +1,11 @@
 {{ if .Site.Params.Comment }}
 <!--上级 globalscript.html-->
 {{ end }} {{ if .Site.Params.enableAplayer }}
-{{ $playlistSource := "json/aplayer.json" | absURL }}
-{{ if and (eq .Site.Params.AplayerSetting.mode "json") .Site.Params.AplayerSetting.jsonurl }}
-{{ $playlistSource = .Site.Params.AplayerSetting.jsonurl }}
+{{ $playlistSource := (default "json/aplayer.json" .Site.Params.musicplayer.local_json) | relURL }}
+{{ if .Site.Params.musicplayer.jsonurl }}
+{{ $playlistSource = .Site.Params.musicplayer.jsonurl }}
 {{ end }}
-<link rel="stylesheet" href='{{ "css/custom-audio-player.css" | absURL }}' />
+<link rel="stylesheet" href='{{ "css/custom-audio-player.css" | relURL }}' />
 <div id="APlayer-c" data-custom-audio-player-root="true" data-source="{{ $playlistSource }}"></div>
-<script type="application/javascript" src='{{ "js/custom-audio-player.js" | absURL }}'></script>
+<script type="application/javascript" src='{{ "js/custom-audio-player.js" | relURL }}'></script>
 {{ end }}

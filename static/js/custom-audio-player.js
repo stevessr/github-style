@@ -194,7 +194,7 @@
       if (!this.inlinePlaylist && !this.source) {
         this.showStatus("未配置歌单地址");
         this.elements.title.textContent = "歌单未配置";
-        this.elements.artist.textContent = "请检查 AplayerSetting";
+        this.elements.artist.textContent = "请检查 musicplayer 配置";
         return;
       }
 
