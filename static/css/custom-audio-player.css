@@ -30,7 +30,7 @@
   border-radius: 14px;
   background: var(--player-bg);
   box-shadow: 0 12px 30px rgba(31, 35, 40, 0.18);
-  overflow: hidden;
+  overflow: visible;
   transition: transform 0.28s ease, opacity 0.2s ease;
   transform-origin: right bottom;
 }
@@ -217,8 +217,19 @@
 }
 
 .custom-audio-player__panel {
-  border-top: 1px solid var(--player-border);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 8px);
+  border: 1px solid var(--player-border);
+  border-radius: 12px;
   background: var(--player-bg);
+  box-shadow: 0 14px 30px rgba(31, 35, 40, 0.2);
+  z-index: 4;
+}
+
+.custom-audio-player__panel[hidden] {
+  display: none;
 }
 
 .custom-audio-player__panel-top {
@@ -261,7 +272,6 @@
 }
 
 .custom-audio-player__list-viewport {
-  position: relative;
   height: min(50vh, 360px);
   overflow: auto;
   border: 1px solid var(--player-border);
@@ -269,16 +279,45 @@
   background: var(--player-panel-bg);
 }
 
-.custom-audio-player__list-spacer {
-  width: 1px;
-  opacity: 0;
+.custom-audio-player__list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
 }
 
-.custom-audio-player__list-items {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
+.custom-audio-player__album-block {
+  border: 1px solid var(--player-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--player-bg);
+}
+
+.custom-audio-player__album-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--player-border);
+  background: var(--player-panel-bg);
+  color: var(--player-muted);
+  font-size: 12px;
+}
+
+.custom-audio-player__album-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+  color: var(--player-text);
+}
+
+.custom-audio-player__album-count {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
 }
 
 .custom-audio-player__track {
@@ -294,6 +333,10 @@
   cursor: pointer;
   text-align: left;
   padding: 0 12px;
+}
+
+.custom-audio-player__album-block .custom-audio-player__track:last-child {
+  border-bottom: 0;
 }
 
 .custom-audio-player__track:hover {

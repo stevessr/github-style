@@ -1,7 +1,5 @@
 (() => {
   const ROOT_SELECTOR = '[data-custom-audio-player-root="true"]';
-  const ROW_HEIGHT = 56;
-  const OVERSCAN = 8;
   const LOOP_STATES = ["all", "one", "off"];
   const LOOP_LABELS = {
     all: "循环：全部",
@@ -104,6 +102,33 @@
     return [];
   }
 
+  function extractAlbumName(rawTrack, artist) {
+    const rawAlbum =
+      normalizeText(rawTrack.album) ||
+      normalizeText(rawTrack.albumName) ||
+      normalizeText(rawTrack.collection);
+    if (rawAlbum) {
+      return rawAlbum;
+    }
+
+    const coverUrl = normalizeText(rawTrack.cover);
+    if (coverUrl) {
+      try {
+        const plainPath = coverUrl.split(/[?#]/)[0];
+        const filename = plainPath.split("/").pop() || "";
+        const decoded = decodeURIComponent(filename);
+        const noExt = decoded.replace(/\.[^.]+$/, "").trim();
+        if (noExt) {
+          return noExt;
+        }
+      } catch (_) {
+        // Ignore decode fallback errors, we will use default album name.
+      }
+    }
+
+    return `${artist} · 单曲`;
+  }
+
   function normalizeTrack(rawTrack, index) {
     if (!rawTrack || typeof rawTrack !== "object") {
       return null;
@@ -116,10 +141,12 @@
 
     const name = normalizeText(rawTrack.name) || `Track ${index + 1}`;
     const artist = normalizeText(rawTrack.artist) || "Unknown Artist";
+    const album = extractAlbumName(rawTrack, artist);
 
     return {
       name,
       artist,
+      album,
       url,
       cover: normalizeText(rawTrack.cover) || PLACEHOLDER_COVER,
       lrc: normalizeText(rawTrack.lrc),
@@ -224,7 +251,6 @@
               <div class="custom-audio-player__status" role="status" aria-live="polite"></div>
               <div class="custom-audio-player__panel-main">
                 <div class="custom-audio-player__list-viewport" tabindex="0">
-                  <div class="custom-audio-player__list-spacer"></div>
                   <div class="custom-audio-player__list-items"></div>
                 </div>
                 <aside class="custom-audio-player__lyric">
@@ -264,7 +290,6 @@
         status: player.querySelector(".custom-audio-player__status"),
         locateCurrent: player.querySelector(".custom-audio-player__locate-current"),
         listViewport: player.querySelector(".custom-audio-player__list-viewport"),
-        listSpacer: player.querySelector(".custom-audio-player__list-spacer"),
         listItems: player.querySelector(".custom-audio-player__list-items"),
         lyricCurrent: player.querySelector(".custom-audio-player__lyric-current"),
         lyricNext: player.querySelector(".custom-audio-player__lyric-next"),
@@ -333,10 +358,6 @@
         this.scrollToCurrent();
       });
 
-      this.elements.listViewport.addEventListener("scroll", () => {
-        this.renderVirtualList();
-      });
-
       this.elements.listItems.addEventListener("click", (event) => {
         const button = event.target.closest(".custom-audio-player__track");
         if (!button) {
@@ -355,7 +376,7 @@
           this.durationCache.set(currentTrack.url, audio.duration);
         }
         this.updateTimeAndProgress();
-        this.renderVirtualList();
+        this.renderGroupedList();
       });
       audio.addEventListener("timeupdate", () => {
         this.updateTimeAndProgress();
@@ -395,7 +416,7 @@
         this.tracks = tracks;
         this.filteredIndices = tracks.map((_, index) => index);
         this.updateCounter();
-        this.renderVirtualList(true);
+        this.renderGroupedList();
         this.selectTrack(0, { autoplay: false });
         this.showStatus(`歌单加载完成，共 ${tracks.length} 首`);
       } catch (error) {
@@ -415,7 +436,7 @@
       this.elements.toggleList.setAttribute("aria-expanded", open ? "true" : "false");
       this.elements.toggleList.textContent = open ? "收起" : "歌单";
       if (open) {
-        this.renderVirtualList(true);
+        this.renderGroupedList();
       }
     }
 
@@ -458,7 +479,7 @@
         this.filteredIndices = this.tracks.map((_, index) => index);
       } else {
         this.filteredIndices = this.tracks.reduce((accumulator, track, index) => {
-          const haystack = `${track.name} ${track.artist}`.toLowerCase();
+          const haystack = `${track.name} ${track.artist} ${track.album}`.toLowerCase();
           if (haystack.includes(normalized)) {
             accumulator.push(index);
           }
@@ -467,69 +488,69 @@
       }
       this.elements.listViewport.scrollTop = 0;
       this.updateCounter();
-      this.renderVirtualList(true);
+      this.renderGroupedList();
     }
 
     updateCounter() {
       this.elements.counter.textContent = `${this.filteredIndices.length} / ${this.tracks.length}`;
     }
 
-    renderVirtualList(force) {
+    buildAlbumGroups() {
+      const grouped = new Map();
+      this.filteredIndices.forEach((trackIndex, order) => {
+        const track = this.tracks[trackIndex];
+        const album = track.album || "未分类专辑";
+        if (!grouped.has(album)) {
+          grouped.set(album, []);
+        }
+        grouped.get(album).push({ trackIndex, order });
+      });
+      return Array.from(grouped.entries()).map(([album, items]) => ({ album, items }));
+    }
+
+    renderGroupedList() {
       if (!this.tracks.length) {
         return;
       }
-
-      const total = this.filteredIndices.length;
-      const viewport = this.elements.listViewport;
-      const spacer = this.elements.listSpacer;
       const items = this.elements.listItems;
-
-      spacer.style.height = `${total * ROW_HEIGHT}px`;
-
-      if (total === 0) {
-        items.style.transform = "translateY(0)";
+      if (this.filteredIndices.length === 0) {
         items.innerHTML = '<div class="custom-audio-player__empty">没有匹配歌曲</div>';
         return;
       }
 
-      if (force) {
-        viewport.scrollTop = viewport.scrollTop;
-      }
+      const groups = this.buildAlbumGroups();
+      const blocks = groups.map((group) => {
+        const rows = group.items
+          .map(({ trackIndex, order }) => {
+            const track = this.tracks[trackIndex];
+            const isActive = trackIndex === this.currentIndex;
+            const cachedDuration = this.durationCache.get(track.url);
+            const indexText = String(order + 1).padStart(2, "0");
+            return `
+              <button type="button" class="custom-audio-player__track${isActive ? " is-active" : ""}" data-track-index="${trackIndex}">
+                <span class="custom-audio-player__track-index">${indexText}</span>
+                <span class="custom-audio-player__track-info">
+                  <span class="custom-audio-player__track-name">${escapeHTML(track.name)}</span>
+                  <span class="custom-audio-player__track-artist">${escapeHTML(track.artist)}</span>
+                </span>
+                <span class="custom-audio-player__track-duration">${formatTime(cachedDuration)}</span>
+              </button>
+            `;
+          })
+          .join("");
 
-      const scrollTop = viewport.scrollTop;
-      const viewportHeight = viewport.clientHeight || 320;
-      const start = clamp(Math.floor(scrollTop / ROW_HEIGHT) - OVERSCAN, 0, total);
-      const end = clamp(
-        Math.ceil((scrollTop + viewportHeight) / ROW_HEIGHT) + OVERSCAN,
-        0,
-        total
-      );
+        return `
+          <section class="custom-audio-player__album-block">
+            <header class="custom-audio-player__album-header">
+              <span class="custom-audio-player__album-title">${escapeHTML(group.album)}</span>
+              <span class="custom-audio-player__album-count">${group.items.length} 首</span>
+            </header>
+            ${rows}
+          </section>
+        `;
+      });
 
-      const rows = [];
-      for (let i = start; i < end; i += 1) {
-        const trackIndex = this.filteredIndices[i];
-        rows.push(this.renderTrackRow(trackIndex, i));
-      }
-
-      items.style.transform = `translateY(${start * ROW_HEIGHT}px)`;
-      items.innerHTML = rows.join("");
-    }
-
-    renderTrackRow(trackIndex, visibleIndex) {
-      const track = this.tracks[trackIndex];
-      const isActive = trackIndex === this.currentIndex;
-      const cachedDuration = this.durationCache.get(track.url);
-      const order = String(visibleIndex + 1).padStart(2, "0");
-      return `
-        <button type="button" class="custom-audio-player__track${isActive ? " is-active" : ""}" data-track-index="${trackIndex}">
-          <span class="custom-audio-player__track-index">${order}</span>
-          <span class="custom-audio-player__track-info">
-            <span class="custom-audio-player__track-name">${escapeHTML(track.name)}</span>
-            <span class="custom-audio-player__track-artist">${escapeHTML(track.artist)}</span>
-          </span>
-          <span class="custom-audio-player__track-duration">${formatTime(cachedDuration)}</span>
-        </button>
-      `;
+      items.innerHTML = blocks.join("");
     }
 
     selectTrack(index, options = {}) {
@@ -550,7 +571,7 @@
       audio.src = track.url;
       audio.load();
       this.updateTimeAndProgress();
-      this.renderVirtualList();
+      this.renderGroupedList();
       this.loadLyric(track);
 
       if (autoplay) {
@@ -680,16 +701,19 @@
       if (visibleIndex === -1) {
         this.elements.search.value = "";
         this.applyFilter("");
-        visibleIndex = this.filteredIndices.indexOf(this.currentIndex);
       }
+      visibleIndex = this.filteredIndices.indexOf(this.currentIndex);
       if (visibleIndex === -1) {
         return;
       }
 
-      const viewport = this.elements.listViewport;
-      const target = visibleIndex * ROW_HEIGHT - viewport.clientHeight / 2 + ROW_HEIGHT / 2;
-      viewport.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
-      this.renderVirtualList(true);
+      this.renderGroupedList();
+      const currentTrackElement = this.elements.listItems.querySelector(
+        `.custom-audio-player__track[data-track-index="${this.currentIndex}"]`
+      );
+      if (currentTrackElement) {
+        currentTrackElement.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
     }
 
     async loadLyric(track) {
