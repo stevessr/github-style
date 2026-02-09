@@ -1,3 +1,19 @@
+{{ $footer := .Site.Params.footer }}
+{{ $themeName := default "github-style" $footer.theme_name }}
+{{ $themeURL := default "https://github.com/MeiK2333/github-style" $footer.theme_url }}
+{{ $poweredByName := default "Hugo" $footer.powered_by_name }}
+{{ $poweredByURL := default "https://gohugo.io/" $footer.powered_by_url }}
+{{ $contactTitle := default "Contact & Info" $footer.contact_title }}
+{{ $email := default .Site.Params.email $footer.email }}
+{{ $websites := $footer.websites }}
+{{ if not $websites }}
+{{ $websites = slice }}
+{{ with .Site.Params.url }}
+{{ $websites = $websites | append (dict "title" "Website" "href" . "text" .) }}
+{{ end }}
+{{ end }}
+{{ $icpText := default "萌 ICP 备 20240144 号" $footer.icp_text }}
+{{ $icpURL := default "https://icp.gov.moe/?keyword=20240144" $footer.icp_url }}
 <div class="footer container-xl width-full p-responsive">
   <div
     class="footer-columns"
@@ -11,7 +27,6 @@
       border-top: 1px solid var(--color-border-default);
     "
   >
-    <!-- Column 1: Theme and Copyright -->
     <div class="footer-column" style="flex: 1; min-width: 280px">
       <div class="d-flex flex-items-center mb-3">
         <a
@@ -41,42 +56,48 @@
       <ul class="list-style-none f6" style="color: var(--color-fg-muted)">
         <li class="mb-2">
           Theme by
-          <a href="https://github.com/MeiK2333/github-style">github-style</a>
+          <a href="{{ $themeURL }}" target="_blank">{{ $themeName }}</a>
         </li>
         <li class="mb-2">
-          Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>
+          Powered by <a href="{{ $poweredByURL }}" target="_blank">{{ $poweredByName }}</a>
         </li>
       </ul>
     </div>
 
-    <!-- Column 2: Personal Info -->
     <div class="footer-column" style="flex: 1; min-width: 280px">
       <h4 style="font-weight: 600; color: var(--color-fg-default)">
-        Contact & Info
+        {{ $contactTitle }}
       </h4>
       <ul class="list-style-none f6" style="color: var(--color-fg-muted)">
+        {{ with $email }}
         <li class="mb-2">
           📧 Email:
-          <a href="mailto:steve-ssr@outlook.com">steve-ssr@outlook.com</a>
+          <a href="mailto:{{ . }}">{{ . }}</a>
         </li>
+        {{ end }}
+        {{ range $websites }}
+        {{ $href := default .url .href }}
+        {{ $title := default "Website" .title }}
+        {{ $text := default $href .text }}
+        {{ if $href }}
         <li class="mb-2">
-          🌐 Website:
-          <a href="https://stevessr.eu.org" target="_blank"
-            >https://stevessr.eu.org</a
-          >
+          🌐 {{ $title }}:
+          <a href="{{ $href }}" target="_blank">{{ $text }}</a>
         </li>
-        <li class="mb-2">
-          🌐 Website:
-          <a href="https://aaca.eu.org" target="_blank">https://aaca.eu.org</a>
-        </li>
+        {{ end }}
+        {{ end }}
       </ul>
     </div>
   </div>
+  {{ if or $icpText $icpURL }}
   <div center class="text-center f6" style="color: var(--color-fg-muted)">
     <li class="mb-2">
-      <a href="https://icp.gov.moe/?keyword=20240144" target="_blank"
-        >萌 ICP 备 20240144 号</a
-      >
+      {{ if $icpURL }}
+      <a href="{{ $icpURL }}" target="_blank">{{ $icpText }}</a>
+      {{ else }}
+      {{ $icpText }}
+      {{ end }}
     </li>
   </div>
+  {{ end }}
 </div>
