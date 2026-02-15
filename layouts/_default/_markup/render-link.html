@@ -26,7 +26,7 @@
       {{- $embedSrc = printf "https://player.bilibili.com/player.html?bvid=%s&page=%s&high_quality=1" $bvid $page -}}
     {{- else if ne $avid $destination -}}
       {{- $provider = "bilibili" -}}
-      {{- $embedSrc = printf "https://player.bilibili.com/player.html?aid=%s&page=%s&high_quality=1" $avid $page -}}
+      {{- $embedSrc = printf "https://player.bilibili.com/player.html?autoplay=false&aid=%s&page=%s&high_quality=1" $avid $page -}}
     {{- end -}}
   {{- end -}}
 

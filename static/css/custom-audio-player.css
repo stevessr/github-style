@@ -87,8 +87,7 @@
   --player-accent-soft: rgba(56, 139, 253, 0.25);
 }
 
-[data-custom-audio-player-root="true"][data-theme="dark"] .custom-audio-player__panel,
-[data-custom-audio-player-root="true"][data-theme="dark"] .custom-audio-player__floating-lyric {
+[data-custom-audio-player-root="true"][data-theme="dark"] .custom-audio-player__panel {
   box-shadow: 0 16px 32px rgba(1, 4, 9, 0.45);
 }
 
@@ -406,16 +405,55 @@
   bottom: 96px;
   width: min(780px, calc(100vw - 24px));
   transform: translateX(-50%);
-  pointer-events: none;
-  border: 1px solid var(--player-border);
+  pointer-events: auto;
+  border: 0;
   border-radius: 12px;
-  background: var(--player-bg);
-  box-shadow: 0 12px 26px rgba(31, 35, 40, 0.2);
+  background: transparent;
+  box-shadow: none;
   z-index: 1602;
-  padding: 10px 16px;
+  padding: 6px 8px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+}
+
+.custom-audio-player__floating-lyric-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.custom-audio-player__floating-lyric-handle,
+.custom-audio-player__floating-lyric-hide {
+  height: 24px;
+  min-width: 48px;
+  padding: 0 8px;
+  border: 1px solid var(--player-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--player-text);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.custom-audio-player__floating-lyric-handle {
+  cursor: grab;
+}
+
+.custom-audio-player__floating-lyric-handle:active {
+  cursor: grabbing;
+}
+
+[data-custom-audio-player-root="true"][data-theme="dark"] .custom-audio-player__floating-lyric-handle,
+[data-custom-audio-player-root="true"][data-theme="dark"] .custom-audio-player__floating-lyric-hide {
+  background: rgba(13, 17, 23, 0.72);
+}
+
+.custom-audio-player__floating-lyric-handle:hover,
+.custom-audio-player__floating-lyric-hide:hover {
+  border-color: var(--player-accent);
+  color: var(--player-accent);
 }
 
 .custom-audio-player__floating-lyric[hidden] {
@@ -429,6 +467,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 .custom-audio-player__floating-lyric-current {

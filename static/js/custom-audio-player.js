@@ -176,6 +176,9 @@
       this.lyrics = [];
       this.lyricCursor = -1;
       this.lyricToken = 0;
+      this.isFloatingLyricVisible = true;
+      this.lyricDragState = null;
+      this.lyricStateStorageKey = this.buildLyricStateStorageKey();
       this.isDockedOpen = false;
       this.themeObserver = null;
     }
@@ -187,6 +190,8 @@
       this.updateLoopButton();
       this.setDocked(false);
       this.setFloatingLyric("暂无歌词", "");
+      this.restoreFloatingLyricState();
+      this.setFloatingLyricVisible(this.isFloatingLyricVisible);
       this.syncThemeMode();
       this.watchThemeMode();
       this.setVolume(0.75);
@@ -230,6 +235,7 @@
                 <button type="button" class="custom-audio-player__icon-btn custom-audio-player__icon-btn--icon" data-action="next" title="下一首">${icon(
                   "next"
                 )}</button>
+                <button type="button" class="custom-audio-player__icon-btn custom-audio-player__lyric-switch" data-action="toggle-lyric" title="隐藏歌词">歌词开</button>
                 <button type="button" class="custom-audio-player__icon-btn custom-audio-player__icon-btn--icon" data-action="collapse" title="收起播放器">${icon(
                   "collapse"
                 )}</button>
@@ -261,6 +267,10 @@
           </div>
         </section>
         <section class="custom-audio-player__floating-lyric" hidden aria-live="polite">
+          <div class="custom-audio-player__floating-lyric-toolbar">
+            <button type="button" class="custom-audio-player__floating-lyric-handle" title="拖动歌词面板">拖动</button>
+            <button type="button" class="custom-audio-player__floating-lyric-hide" title="隐藏歌词">隐藏</button>
+          </div>
           <p class="custom-audio-player__floating-lyric-current">暂无歌词</p>
           <p class="custom-audio-player__floating-lyric-next"></p>
         </section>
@@ -283,6 +293,7 @@
         controls: player.querySelector(".custom-audio-player__controls"),
         playButton: player.querySelector(".custom-audio-player__play"),
         loopButton: player.querySelector(".custom-audio-player__loop"),
+        lyricSwitch: player.querySelector(".custom-audio-player__lyric-switch"),
         volumeInput: player.querySelector(".custom-audio-player__volume-input"),
         time: player.querySelector(".custom-audio-player__time"),
         progressTrack: player.querySelector(".custom-audio-player__progress-track"),
@@ -296,6 +307,8 @@
         listViewport: panel.querySelector(".custom-audio-player__list-viewport"),
         listItems: panel.querySelector(".custom-audio-player__list-items"),
         floatingLyric: this.root.querySelector(".custom-audio-player__floating-lyric"),
+        floatingLyricHandle: this.root.querySelector(".custom-audio-player__floating-lyric-handle"),
+        floatingLyricHide: this.root.querySelector(".custom-audio-player__floating-lyric-hide"),
         floatingLyricCurrent: this.root.querySelector(".custom-audio-player__floating-lyric-current"),
         floatingLyricNext: this.root.querySelector(".custom-audio-player__floating-lyric-next"),
       };
@@ -337,6 +350,10 @@
           this.playNext(true);
           return;
         }
+        if (action === "toggle-lyric") {
+          this.setFloatingLyricVisible(!this.isFloatingLyricVisible);
+          return;
+        }
         if (action === "toggle-play") {
           this.togglePlay();
           return;
@@ -368,6 +385,30 @@
 
       this.elements.closeList.addEventListener("click", () => {
         this.setPanelOpen(false);
+      });
+
+      this.elements.floatingLyricHide.addEventListener("click", () => {
+        this.setFloatingLyricVisible(false);
+      });
+
+      this.elements.floatingLyricHandle.addEventListener("pointerdown", (event) => {
+        this.startFloatingLyricDrag(event);
+      });
+
+      window.addEventListener("pointermove", (event) => {
+        this.updateFloatingLyricDrag(event);
+      });
+
+      window.addEventListener("pointerup", (event) => {
+        this.finishFloatingLyricDrag(event);
+      });
+
+      window.addEventListener("pointercancel", (event) => {
+        this.finishFloatingLyricDrag(event);
+      });
+
+      window.addEventListener("resize", () => {
+        this.ensureFloatingLyricInViewport();
       });
 
       this.elements.listItems.addEventListener("click", (event) => {
@@ -688,6 +729,69 @@
       this.elements.loopButton.title = label;
     }
 
+    buildLyricStateStorageKey() {
+      const rootId = normalizeText(this.root.id);
+      const rootSource = normalizeText(this.root.dataset.source);
+      const token = rootId || rootSource || "default";
+      return `custom-audio-player:floating-lyric:${encodeURIComponent(token).slice(0, 160)}`;
+    }
+
+    saveFloatingLyricState() {
+      if (typeof localStorage === "undefined") {
+        return;
+      }
+      try {
+        const lyric = this.elements.floatingLyric;
+        const left = Number.parseFloat(lyric.style.left);
+        const top = Number.parseFloat(lyric.style.top);
+        localStorage.setItem(
+          this.lyricStateStorageKey,
+          JSON.stringify({
+            visible: this.isFloatingLyricVisible,
+            left: Number.isFinite(left) ? left : null,
+            top: Number.isFinite(top) ? top : null,
+          })
+        );
+      } catch (_) {
+        // Ignore storage quota / privacy mode errors.
+      }
+    }
+
+    restoreFloatingLyricState() {
+      if (typeof localStorage === "undefined") {
+        return;
+      }
+      try {
+        const raw = localStorage.getItem(this.lyricStateStorageKey);
+        if (!raw) {
+          return;
+        }
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") {
+          return;
+        }
+        if (typeof parsed.visible === "boolean") {
+          this.isFloatingLyricVisible = parsed.visible;
+        }
+        if (Number.isFinite(parsed.left) && Number.isFinite(parsed.top)) {
+          const lyric = this.elements.floatingLyric;
+          lyric.style.left = `${parsed.left}px`;
+          lyric.style.top = `${parsed.top}px`;
+          lyric.style.bottom = "auto";
+          lyric.style.transform = "none";
+        }
+      } catch (_) {
+        // Ignore malformed JSON / storage access errors.
+      }
+    }
+
+    updateLyricSwitch() {
+      const visible = this.isFloatingLyricVisible;
+      this.elements.lyricSwitch.textContent = visible ? "歌词开" : "歌词关";
+      this.elements.lyricSwitch.title = visible ? "隐藏歌词" : "显示歌词";
+      this.elements.lyricSwitch.setAttribute("aria-pressed", visible ? "true" : "false");
+    }
+
     updatePlayButton() {
       if (this.elements.audio.paused) {
         this.elements.playButton.innerHTML = icon("play");
@@ -788,8 +892,120 @@
       }
     }
 
+    setFloatingLyricVisible(visible) {
+      this.isFloatingLyricVisible = Boolean(visible);
+      this.elements.floatingLyric.hidden = !this.isFloatingLyricVisible;
+      if (!this.isFloatingLyricVisible) {
+        this.finishFloatingLyricDrag();
+      }
+      this.updateLyricSwitch();
+      if (this.isFloatingLyricVisible) {
+        this.ensureFloatingLyricInViewport();
+      }
+      this.saveFloatingLyricState();
+    }
+
+    startFloatingLyricDrag(event) {
+      if (!this.isFloatingLyricVisible || !event.isPrimary) {
+        return;
+      }
+      if (typeof event.button === "number" && event.button !== 0) {
+        return;
+      }
+      event.preventDefault();
+      const lyric = this.elements.floatingLyric;
+      const rect = lyric.getBoundingClientRect();
+      lyric.style.left = `${rect.left}px`;
+      lyric.style.top = `${rect.top}px`;
+      lyric.style.bottom = "auto";
+      lyric.style.transform = "none";
+      this.lyricDragState = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        startLeft: rect.left,
+        startTop: rect.top,
+        width: rect.width,
+        height: rect.height,
+      };
+
+      if (typeof this.elements.floatingLyricHandle.setPointerCapture === "function") {
+        try {
+          this.elements.floatingLyricHandle.setPointerCapture(event.pointerId);
+        } catch (_) {
+          // Ignore pointer-capture failures in unsupported browsers.
+        }
+      }
+    }
+
+    updateFloatingLyricDrag(event) {
+      if (!this.lyricDragState || event.pointerId !== this.lyricDragState.pointerId) {
+        return;
+      }
+      event.preventDefault();
+      const maxLeft = Math.max(4, window.innerWidth - this.lyricDragState.width - 4);
+      const maxTop = Math.max(4, window.innerHeight - this.lyricDragState.height - 4);
+      const nextLeft = clamp(
+        this.lyricDragState.startLeft + (event.clientX - this.lyricDragState.startX),
+        4,
+        maxLeft
+      );
+      const nextTop = clamp(
+        this.lyricDragState.startTop + (event.clientY - this.lyricDragState.startY),
+        4,
+        maxTop
+      );
+      this.elements.floatingLyric.style.left = `${nextLeft}px`;
+      this.elements.floatingLyric.style.top = `${nextTop}px`;
+    }
+
+    finishFloatingLyricDrag(event) {
+      if (!this.lyricDragState) {
+        return;
+      }
+      if (
+        event &&
+        typeof event.pointerId === "number" &&
+        event.pointerId !== this.lyricDragState.pointerId
+      ) {
+        return;
+      }
+
+      if (
+        event &&
+        typeof this.elements.floatingLyricHandle.hasPointerCapture === "function" &&
+        this.elements.floatingLyricHandle.hasPointerCapture(event.pointerId)
+      ) {
+        try {
+          this.elements.floatingLyricHandle.releasePointerCapture(event.pointerId);
+        } catch (_) {
+          // Ignore pointer-capture release errors.
+        }
+      }
+
+      this.lyricDragState = null;
+      this.saveFloatingLyricState();
+    }
+
+    ensureFloatingLyricInViewport() {
+      if (!this.isFloatingLyricVisible) {
+        return;
+      }
+      const lyric = this.elements.floatingLyric;
+      if (!lyric.style.left || !lyric.style.top) {
+        return;
+      }
+      const rect = lyric.getBoundingClientRect();
+      const maxLeft = Math.max(4, window.innerWidth - rect.width - 4);
+      const maxTop = Math.max(4, window.innerHeight - rect.height - 4);
+      const clampedLeft = clamp(rect.left, 4, maxLeft);
+      const clampedTop = clamp(rect.top, 4, maxTop);
+      lyric.style.left = `${clampedLeft}px`;
+      lyric.style.top = `${clampedTop}px`;
+      this.saveFloatingLyricState();
+    }
+
     setFloatingLyric(currentLine, nextLine) {
-      this.elements.floatingLyric.hidden = false;
       this.elements.floatingLyricCurrent.textContent = normalizeText(currentLine) || " ";
       this.elements.floatingLyricNext.textContent = normalizeText(nextLine);
     }

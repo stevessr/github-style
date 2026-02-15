@@ -37,7 +37,7 @@
     if (avidMatch) {
       return {
         provider: "bilibili",
-        embedSrc: `https://player.bilibili.com/player.html?aid=${avidMatch[1]}&page=${page}&high_quality=1`,
+        embedSrc: `https://player.bilibili.com/player.html?autoplay=false&aid=${avidMatch[1]}&page=${page}&high_quality=1`,
       };
     }
 
