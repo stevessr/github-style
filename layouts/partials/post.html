@@ -91,7 +91,8 @@
                   <div class="markdown-body">
                     <p>本文已加密，请输入密码查看。</p>
                     <div class="post-encrypt-container" data-content="{{ $encryptedContent }}" data-password-hash="{{ $passwordHash }}">
-                      <input class="form-control post-encrypt-input" type="password" placeholder="请输入文章密码" />
+                      <label for="post-encrypt-input" class="d-block mb-2">文章密码</label>
+                      <input id="post-encrypt-input" class="form-control post-encrypt-input" type="password" placeholder="请输入文章密码" aria-label="文章密码" />
                       <button class="btn mt-2 post-encrypt-button" type="button">解密</button>
                       <p class="post-encrypt-error mt-2 text-danger" style="display: none;">密码错误，请重试。</p>
                     </div>

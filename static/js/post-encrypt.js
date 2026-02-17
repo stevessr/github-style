@@ -11,6 +11,18 @@
     const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
     return new TextDecoder().decode(bytes);
   };
+  const sanitize = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    doc.querySelectorAll("script,iframe,object,embed").forEach((el) => el.remove());
+    doc.querySelectorAll("*").forEach((el) => {
+      Array.from(el.attributes).forEach((attr) => {
+        if (/^on/i.test(attr.name) || /javascript:/i.test(attr.value)) {
+          el.removeAttribute(attr.name);
+        }
+      });
+    });
+    return doc.body.innerHTML;
+  };
 
   const initEncryptedPost = () => {
     document.querySelectorAll(".post-encrypt-container").forEach((container) => {
@@ -21,18 +33,28 @@
 
       if (!input || !button || !error || !content) return;
 
-      button.addEventListener("click", async () => {
+      const unlock = async () => {
         const value = input.value;
-        if (!value) return;
+        if (!value) {
+          error.textContent = "请输入密码。";
+          error.style.display = "block";
+          return;
+        }
         const hash = await sha256(value);
         if (hash !== container.dataset.passwordHash) {
+          error.textContent = "密码错误，请重试。";
           error.style.display = "block";
           return;
         }
         error.style.display = "none";
-        content.innerHTML = decode(container.dataset.content || "");
+        content.innerHTML = sanitize(decode(container.dataset.content || ""));
         content.style.display = "block";
         container.style.display = "none";
+      };
+
+      button.addEventListener("click", unlock);
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") unlock();
       });
     });
   };

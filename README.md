@@ -61,6 +61,7 @@ password = "your-password"
 ```
 
 When `password` is set, the built output stores only encoded content and requires password input in browser to reveal the article.
+请使用高强度密码（此功能用于防止明文直接暴露，不等同于服务端访问控制）。
 
 ## Limit display content
 
