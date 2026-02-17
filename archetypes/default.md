@@ -5,4 +5,5 @@ author = ""
 keywords = ["", ""]
 cover = ""
 summary = ""
+password = ""
 +++

@@ -52,6 +52,16 @@ Hugo will create a post with `draft: true`, change it to false in order for it t
 hugo new posts/title_of_the_post.md
 ```
 
+## Encrypt post content
+
+Add `password` in front matter to enable encrypted post rendering:
+
+```toml
+password = "your-password"
+```
+
+When `password` is set, the built output stores only encoded content and requires password input in browser to reveal the article.
+
 ## Limit display content
 
 ### Approach 1: use summary
