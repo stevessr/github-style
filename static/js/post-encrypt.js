@@ -54,7 +54,10 @@
 
       button.addEventListener("click", unlock);
       input.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") unlock();
+        if (event.key === "Enter") {
+          event.preventDefault();
+          unlock();
+        }
       });
     });
   };

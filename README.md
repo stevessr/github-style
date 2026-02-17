@@ -62,6 +62,7 @@ password = "your-password"
 
 When `password` is set, the built output stores only encoded content and requires password input in browser to reveal the article.
 Use a strong password (this feature prevents plaintext exposure but is not equivalent to server-side access control).
+Do not use highly sensitive secrets as post passwords, since the password value is configured in your content front matter.
 
 ## Limit display content
 
