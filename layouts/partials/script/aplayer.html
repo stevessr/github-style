@@ -5,7 +5,9 @@
 {{ if .Site.Params.musicplayer.jsonurl }}
 {{ $playlistSource = .Site.Params.musicplayer.jsonurl }}
 {{ end }}
+<link rel="stylesheet" href='{{ "vendor/aplayer/APlayer.min.css" | relURL }}' />
 <link rel="stylesheet" href='{{ "css/custom-audio-player.css" | relURL }}' />
 <div id="APlayer-c" data-custom-audio-player-root="true" data-source="{{ $playlistSource }}"></div>
+<script type="application/javascript" src='{{ "vendor/aplayer/APlayer.min.js" | relURL }}'></script>
 <script type="application/javascript" src='{{ "js/custom-audio-player.js" | relURL }}'></script>
 {{ end }}

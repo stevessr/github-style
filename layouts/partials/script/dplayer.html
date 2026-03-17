@@ -8,11 +8,13 @@
   (dict "name" .Site.Params.Aplayer.Name3 "artist" .Site.Params.Aplayer.Artist3 "url" .Site.Params.Aplayer.Url3 "cover" .Site.Params.Aplayer.Cover3)
   (dict "name" .Site.Params.Aplayer.Name4 "artist" .Site.Params.Aplayer.Artist4 "url" .Site.Params.Aplayer.Url4 "cover" .Site.Params.Aplayer.Cover4)
 }}
+<link rel="stylesheet" href='{{ "vendor/aplayer/APlayer.min.css" | relURL }}' />
 <link rel="stylesheet" href='{{ "css/custom-audio-player.css" | relURL }}' />
 <div
   id="APlayer-d"
   data-custom-audio-player-root="true"
   data-inline-playlist='{{ jsonify $inlinePlaylist | htmlEscape }}'
 ></div>
+<script type="application/javascript" src='{{ "vendor/aplayer/APlayer.min.js" | relURL }}'></script>
 <script type="application/javascript" src='{{ "js/custom-audio-player.js" | relURL }}'></script>
 {{ end }}
