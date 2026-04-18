@@ -44,3 +44,29 @@
 {{ if eq (getenv "HUGO_ENV") "production"}}
 {{ template "_internal/google_analytics.html" . }}
 {{ end }}
+
+<style>
+  /* Wide Mode Overrides */
+  html[data-wide-mode="true"] .container-lg,
+  html[data-wide-mode="true"] .container-xl,
+  html[data-wide-mode="true"] #waline {
+    max-width: 95% !important;
+    width: 95% !important;
+  }
+
+  html[data-wide-mode="true"] .application-main {
+    max-width: none !important;
+  }
+
+  /* Ensure Waline matches default content width in normal mode */
+  html:not([data-wide-mode="true"]) #waline {
+    max-width: 1012px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Transitions for smooth resizing */
+  .container-lg, .container-xl, #waline {
+    transition: max-width 0.3s ease, width 0.3s ease;
+  }
+</style>
