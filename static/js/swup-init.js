@@ -70,4 +70,11 @@ swup.hooks.on('content:replace', () => {
       initWaline();
     }
   } catch (e) { console.error('Error re-initializing Waline:', e); }
+
+  // Render inline footnotes ^[...]
+  try {
+    if (typeof renderInlineFootnotes === 'function') {
+      renderInlineFootnotes();
+    }
+  } catch (e) { console.error('Error rendering footnotes:', e); }
 });
