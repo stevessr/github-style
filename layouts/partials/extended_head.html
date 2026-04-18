@@ -69,4 +69,107 @@
   .container-lg, .container-xl, #waline {
     transition: max-width 0.3s ease, width 0.3s ease;
   }
+
+  /* Footnote Styles */
+  .footnote-ref {
+    vertical-align: super;
+    font-size: 0.75em;
+    margin-left: 2px;
+  }
+  .footnotes {
+    margin-top: 40px;
+    font-size: 0.9em;
+    color: var(--color-fg-muted);
+    border-top: 1px solid var(--color-border-default);
+    padding-top: 20px;
+  }
+  .footnotes ol {
+    padding-left: 20px;
+  }
+  .footnote-backref {
+    font-family: sans-serif;
+    text-decoration: none;
+    margin-left: 4px;
+  }
 </style>
+
+<script>
+window.renderInlineFootnotes = function() {
+  // Use a broad selector to catch titles and content
+  const containers = document.querySelectorAll('main, .markdown-body');
+  if (containers.length === 0) return;
+
+  // We only want to process the main content once. 
+  // If we have already added footnotes, don't do it again.
+  if (document.querySelector('.footnotes')) return;
+
+  let count = 1;
+  const footnotes = [];
+
+  // Use a more aggressive approach: iterate through all text nodes
+  function processNode(node) {
+    if (node.nodeType === 3) { // Text node
+      const text = node.textContent;
+      if (text.includes('^[')) {
+        const regex = /\^\[(.*?)\]/g;
+        let match;
+        let lastIndex = 0;
+        const fragment = document.createDocumentFragment();
+        
+        while ((match = regex.exec(text)) !== null) {
+          // Add preceding text
+          fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
+          
+          const content = match[1];
+          const id = 'fnref-' + count;
+          const fnId = 'fn-' + count;
+          footnotes.push({ id: fnId, refId: id, content: content });
+          
+          const sup = document.createElement('sup');
+          sup.className = 'footnote-ref';
+          sup.id = id;
+          const a = document.createElement('a');
+          a.href = '#' + fnId;
+          a.textContent = '[' + count + ']';
+          sup.appendChild(a);
+          fragment.appendChild(sup);
+          
+          count++;
+          lastIndex = regex.lastIndex;
+        }
+        
+        fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+        node.parentNode.replaceChild(fragment, node);
+      }
+    } else if (node.nodeType === 1 && !['PRE', 'CODE', 'A', 'SCRIPT', 'STYLE'].includes(node.tagName)) {
+      // Create a static array of children to avoid issues with live modification
+      const children = Array.from(node.childNodes);
+      for (const child of children) {
+        processNode(child);
+      }
+    }
+  }
+
+  // Find the primary container to walk through
+  const main = document.querySelector('main') || document.body;
+  processNode(main);
+
+  if (footnotes.length > 0) {
+    const footer = document.createElement('div');
+    footer.className = 'footnotes';
+    footer.innerHTML = '<hr><ol></ol>';
+    const ol = footer.querySelector('ol');
+    
+    footnotes.forEach(fn => {
+      const li = document.createElement('li');
+      li.id = fn.id;
+      li.innerHTML = fn.content + ' <a href="#' + fn.refId + '" class="footnote-backref">↩</a>';
+      ol.appendChild(li);
+    });
+    
+    // Append to the end of .markdown-body if exists, else to main
+    const contentArea = document.querySelector('.markdown-body') || main;
+    contentArea.appendChild(footer);
+  }
+};
+</script>

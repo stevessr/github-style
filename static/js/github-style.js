@@ -28,7 +28,6 @@ let contributions;
 
 window.initTheme = function() {
   setRelativeTime();
-  if (typeof renderInlineFootnotes === 'function') renderInlineFootnotes();
   const dom = document.querySelector('#contributions');
   if (!dom) {
     return;
@@ -368,83 +367,3 @@ function setRelativeTime() {
   });
 }
 
-window.renderInlineFootnotes = function() {
-  const container = document.querySelector('.markdown-body');
-  if (!container) return;
-
-  // Avoid re-rendering if already handled
-  if (container.querySelector('.footnotes')) return;
-
-  let html = container.innerHTML;
-  let count = 1;
-  const footnotes = [];
-
-  // Helper to escape HTML in content
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
-  // Find ^[...] and replace with sup link
-  // Use a more complex approach to avoid code blocks
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = html;
-
-  // Process text nodes only, avoiding <pre>, <code>, <a> tags
-  function walk(node) {
-    if (node.nodeType === 3) { // Text node
-      const text = node.textContent;
-      if (text.includes('^[')) {
-        const parts = text.split(/\^\[(.*?)\]/g);
-        if (parts.length > 1) {
-          const fragment = document.createDocumentFragment();
-          for (let i = 0; i < parts.length; i++) {
-            if (i % 2 === 0) {
-              fragment.appendChild(document.createTextNode(parts[i]));
-            } else {
-              const content = parts[i];
-              const id = 'fnref-' + count;
-              const fnId = 'fn-' + count;
-              footnotes.push({ id: fnId, refId: id, content: content, index: count });
-              
-              const sup = document.createElement('sup');
-              sup.className = 'footnote-ref';
-              sup.id = id;
-              const a = document.createElement('a');
-              a.href = '#' + fnId;
-              a.textContent = count;
-              sup.appendChild(a);
-              fragment.appendChild(sup);
-              count++;
-            }
-          }
-          node.parentNode.replaceChild(fragment, node);
-        }
-      }
-    } else if (node.nodeType === 1 && !['PRE', 'CODE', 'A', 'SCRIPT', 'STYLE'].includes(node.tagName)) {
-      for (let i = 0; i < node.childNodes.length; i++) {
-        walk(node.childNodes[i]);
-      }
-    }
-  }
-
-  walk(tempDiv);
-
-  if (footnotes.length > 0) {
-    const footer = document.createElement('div');
-    footer.className = 'footnotes';
-    footer.innerHTML = '<hr><ol></ol>';
-    const ol = footer.querySelector('ol');
-    
-    footnotes.forEach(fn => {
-      const li = document.createElement('li');
-      li.id = fn.id;
-      li.innerHTML = fn.content + ' <a href="#' + fn.refId + '" class="footnote-backref">↩</a>';
-      ol.appendChild(li);
-    });
-    tempDiv.appendChild(footer);
-  }
-
-  container.innerHTML = tempDiv.innerHTML;
-};
