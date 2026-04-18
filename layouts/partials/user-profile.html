@@ -241,15 +241,17 @@
 window.onscroll = function (e) {
   const headerImg = document.querySelector('#headerImg');
   const headerStuck = document.querySelector('#headerStuck');
-  if (headerImg.getBoundingClientRect().bottom <= 0) {
-    headerStuck.classList.add('is-stuck');
-    if (window.innerWidth >= 1280) {
-      headerStuck.setAttribute('style', 'top: 12px;')
+  if (headerImg && headerStuck) {
+    if (headerImg.getBoundingClientRect().bottom <= 0) {
+      headerStuck.classList.add('is-stuck');
+      if (window.innerWidth >= 1280) {
+        headerStuck.setAttribute('style', 'top: 12px;')
+      } else {
+        headerStuck.setAttribute('style', 'top: 0;')
+      }
     } else {
-      headerStuck.setAttribute('style', 'top: 0;')
+      headerStuck.classList.remove('is-stuck');
     }
-  } else {
-    headerStuck.classList.remove('is-stuck');
   }
 };
 
