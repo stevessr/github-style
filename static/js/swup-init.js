@@ -1,7 +1,7 @@
 // Initialize Swup
 const swup = new Swup({
   containers: ["#main-content"],
-  animationSelector: '[class*="transition-"]',
+  animationSelector: false,
   cache: false, // Disable cache for debugging
   plugins: [new SwupHeadPlugin()],
   linkSelector: 'a[href^="' + window.location.origin + '"]:not([data-no-swup]), a[href^="/"]:not([data-no-swup]), a[href^="#"]:not([data-no-swup])',

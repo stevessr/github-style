@@ -33,30 +33,10 @@
     color: #c9d1d9 !important;
   }
 </style>
-  <script type="module">
-    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
-
-    // Store the instance globally for SPA cleanup
-    window.walineInstance = null;
-
-    window.initWaline = function() {
-      const el = document.querySelector('#waline');
-      if (!el) return;
-
-      // Cleanup existing instance if any
-      if (window.walineInstance && typeof window.walineInstance.destroy === 'function') {
-        window.walineInstance.destroy();
-      }
-      
-      window.walineInstance = init({
-        el: '#waline',
-        serverURL: '{{ .Site.Params.Waline.serverurl }}',
-        dark: 'html[data-color-mode="dark"]',
-      });
-    }
-
-    // Initial load
-    window.initWaline();
-  </script>
-
+<script>
+  // Initial load for non-SPA entry
+  if (typeof initWaline === 'function') {
+    initWaline();
+  }
+</script>
 {{ end }}

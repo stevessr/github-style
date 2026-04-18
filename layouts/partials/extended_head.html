@@ -1,49 +1,3 @@
-<meta name="description"
-  content="{{ if .IsHome }}{{ .Site.Params.tagline }}{{ else }}{{ .Summary | plainify }}{{ end }}" />
-<meta name="keywords"
-  content='{{ with .Params.Keywords }}{{ delimit . ", " }}{{ else }}{{ $.Site.Params.Keywords }}{{ end }}' />
-<meta name="robots" content="noodp" />
-<link rel="canonical" href="{{ .Permalink }}" />
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="{{ if .IsHome }}{{ else }}{{ .Title }} - {{ end }}{{ .Site.Title }}" />
-<meta name="twitter:description"
-  content="{{ if .IsHome }}{{ $.Site.Params.description }}{{ else }}{{ .Summary | plainify }}{{ end }}" />
-<meta name="twitter:site" content="{{ $.Site.BaseURL }}" />
-<meta name="twitter:creator" content="{{ .Params.Author }}" />
-<meta name="twitter:image"
-  content="{{ if .IsHome }}{{ $.Site.Params.avatar | absURL }}{{ else }}{{ .Params.Cover | absURL }}{{ end }}">
-
-<!-- OG data -->
-<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
-<meta property="og:title" content="{{ if .IsHome }}{{ else }}{{ .Title }} - {{ end }}{{ .Site.Title }}">
-<meta property="og:description"
-  content="{{ if .IsHome }}{{ $.Site.Params.description }}{{ else }}{{ .Summary | plainify }}{{ end }}" />
-<meta property="og:url" content="{{ .Permalink }}" />
-<meta property="og:site_name" content="{{ .Title }}" />
-<meta property="og:image"
-  content="{{ if .IsHome }}{{ $.Site.Params.avatar | absURL }}{{ else }}{{ .Params.Cover | absURL }}{{ end }}">
-<meta property="og:image:width" content="2048">
-<meta property="og:image:height" content="1024">
-{{ if isset .Params "date" }}
-<meta property="article:published_time" content="{{ time .Date }}" />
-{{ end }}
-
-<!-- RSS -->
-{{ with .OutputFormats.Get "RSS" }}
-<link href="{{ .RelPermalink }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" />
-{{ end }}
-
-<!-- JSON Feed -->
-{{ with .OutputFormats.Get "json" }}
-<link href="{{ .RelPermalink }}" rel="alternate" type="application/json" title="{{ $.Site.Title }}" />
-{{ end }}
-
-<!-- Google Analytics -->
-{{ if eq (getenv "HUGO_ENV") "production"}}
-{{ template "_internal/google_analytics.html" . }}
-{{ end }}
 
 <style>
   /* Wide Mode Overrides */
@@ -95,36 +49,27 @@
 
 <script>
 window.renderInlineFootnotes = function() {
-  // Use a broad selector to catch titles and content
   const containers = document.querySelectorAll('main, .markdown-body');
   if (containers.length === 0) return;
-
-  // We only want to process the main content once. 
-  // If we have already added footnotes, don't do it again.
   if (document.querySelector('.footnotes')) return;
 
   let count = 1;
   const footnotes = [];
 
-  // Use a more aggressive approach: iterate through all text nodes
   function processNode(node) {
-    if (node.nodeType === 3) { // Text node
+    if (node.nodeType === 3) {
       const text = node.textContent;
       if (text.includes('^[')) {
         const regex = /\^\[(.*?)\]/g;
         let match;
         let lastIndex = 0;
         const fragment = document.createDocumentFragment();
-        
         while ((match = regex.exec(text)) !== null) {
-          // Add preceding text
           fragment.appendChild(document.createTextNode(text.substring(lastIndex, match.index)));
-          
           const content = match[1];
           const id = 'fnref-' + count;
           const fnId = 'fn-' + count;
           footnotes.push({ id: fnId, refId: id, content: content });
-          
           const sup = document.createElement('sup');
           sup.className = 'footnote-ref';
           sup.id = id;
@@ -133,16 +78,13 @@ window.renderInlineFootnotes = function() {
           a.textContent = '[' + count + ']';
           sup.appendChild(a);
           fragment.appendChild(sup);
-          
           count++;
           lastIndex = regex.lastIndex;
         }
-        
         fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
         node.parentNode.replaceChild(fragment, node);
       }
     } else if (node.nodeType === 1 && !['PRE', 'CODE', 'A', 'SCRIPT', 'STYLE'].includes(node.tagName)) {
-      // Create a static array of children to avoid issues with live modification
       const children = Array.from(node.childNodes);
       for (const child of children) {
         processNode(child);
@@ -150,7 +92,6 @@ window.renderInlineFootnotes = function() {
     }
   }
 
-  // Find the primary container to walk through
   const main = document.querySelector('main') || document.body;
   processNode(main);
 
@@ -159,17 +100,41 @@ window.renderInlineFootnotes = function() {
     footer.className = 'footnotes';
     footer.innerHTML = '<hr><ol></ol>';
     const ol = footer.querySelector('ol');
-    
     footnotes.forEach(fn => {
       const li = document.createElement('li');
       li.id = fn.id;
       li.innerHTML = fn.content + ' <a href="#' + fn.refId + '" class="footnote-backref">↩</a>';
       ol.appendChild(li);
     });
-    
-    // Append to the end of .markdown-body if exists, else to main
     const contentArea = document.querySelector('.markdown-body') || main;
     contentArea.appendChild(footer);
   }
+};
+
+// Waline Global Logic
+window.initWaline = function() {
+  const el = document.querySelector('#waline');
+  
+  if (window.walineInstance && typeof window.walineInstance.destroy === 'function') {
+    try {
+      window.walineInstance.destroy();
+    } catch (e) {
+      // In SPA, the old element is often already gone, causing destroy to fail.
+      // We catch this to avoid breaking the rest of the script.
+    }
+    window.walineInstance = null;
+  }
+
+  if (!el) return;
+
+  import('https://unpkg.com/@waline/client@v3/dist/waline.js').then(({ init }) => {
+    // Check again if element still exists after async import
+    if (!document.querySelector('#waline')) return;
+    window.walineInstance = init({
+      el: '#waline',
+      serverURL: '{{ .Site.Params.Waline.serverurl }}',
+      dark: 'html[data-color-mode="dark"]',
+    });
+  }).catch(err => console.error('Failed to load Waline:', err));
 };
 </script>
