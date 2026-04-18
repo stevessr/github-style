@@ -18,7 +18,7 @@ min_version = "0.41"
 
 [params]
   favicon = "/images/github-mark.png"
-  avatar = "/images/avatar.gif"
+  avatar = "/images/stevessr.png"
   MathJax = true
 
 [sitemap]
