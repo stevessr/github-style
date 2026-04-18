@@ -55,6 +55,20 @@
           <path fill-rule="evenodd" d="M1.5 1.75V13.5h13V1.75H1.5zM0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v11.75A1.75 1.75 0 0114.25 15.25H1.75A1.75 1.75 0 010 13.5V1.75zM11.75 3a.75.75 0 01.75.75v7.5a.75.75 0 01-1.5 0v-7.5a.75.75 0 01.75-.75zm-7.5 0a.75.75 0 01.75.75v7.5a.75.75 0 01-1.5 0v-7.5a.75.75 0 01.75-.75z"></path>
         </svg>
       </a>
+      <script>
+        function switchWideMode() {
+          const isWide = document.documentElement.getAttribute('data-wide-mode') === 'true';
+          setWideMode(!isWide);
+        }
+        function setWideMode(isWide) {
+          document.documentElement.setAttribute('data-wide-mode', isWide);
+          localStorage.setItem('data-wide-mode', isWide);
+        }
+        // Initialize on load
+        if (localStorage.getItem('data-wide-mode') === 'true') {
+          setWideMode(true);
+        }
+      </script>
       <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
         <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
           version="1.1" width="16" height="16">
