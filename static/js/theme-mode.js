@@ -10,6 +10,16 @@ function switchTheme() {
   }
 }
 
+function switchWideMode() {
+  const isWide = document.documentElement.getAttribute('data-wide-mode') === 'true';
+  setWideMode(!isWide);
+}
+
+function setWideMode(isWide) {
+  document.documentElement.setAttribute('data-wide-mode', isWide);
+  localStorage.setItem('data-wide-mode', isWide);
+}
+
 function setTheme(style) {
   document.querySelectorAll('.isInitialToggle').forEach(elem => {
     elem.classList.remove('isInitialToggle');
@@ -46,6 +56,12 @@ function currentTheme() {
   return localStyle || systemStyle;
 }
 
+function currentWideMode() {
+  const localWide = localStorage.getItem('data-wide-mode');
+  return localWide === 'true';
+}
+
 (() => {
   setTheme(currentTheme());
+  setWideMode(currentWideMode());
 })();

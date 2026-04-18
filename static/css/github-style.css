@@ -210,3 +210,21 @@ body {
 .border-top.color-border-secondary > div > a:hover svg {
   animation: spin 2s linear infinite;
 }
+
+/* Wide Mode Styles */
+html[data-wide-mode="true"] .container-lg {
+    max-width: 90% !important;
+}
+
+html[data-wide-mode="true"] #waline {
+    max-width: 90% !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Default Mode Styles - Ensure Waline matches content width */
+html:not([data-wide-mode="true"]) #waline {
+    max-width: 1012px; /* Standard container-lg width */
+    margin-left: auto;
+    margin-right: auto;
+}
