@@ -38,7 +38,11 @@
 
             <div>
               <div class="col-12 d-inline-block text-gray mb-2 pr-4">
+                {{ if .Params.password }}
+                本文已加密
+                {{ else }}
                 {{ .Summary | safeHTML }}
+                {{ end }}
               </div>
             </div>
 

@@ -13,7 +13,11 @@
 
     {{- /* Generate page description. */ -}}
     {{- $desc := "" -}}
-    {{- if .Params.summary -}}
+    {{- $content := (.Plain | htmlUnescape | truncate 5000) -}}
+    {{- if .Params.password -}}
+      {{- $desc = "本文已加密" -}}
+      {{- $content = "" -}}
+    {{- else if .Params.summary -}}
       {{- $desc = .Params.summary -}}
     {{- else if .Params.abstract -}}
       {{- $desc = .Params.abstract -}}
@@ -58,7 +62,7 @@
       {{/* exclude "content/readme.md". */}}
       {{ $hidden_file := "/readme/" }}
       {{ if ne $hidden_file $rel_permalink }}
-        {{- $index = $index | append (dict "objectID" .File.UniqueID "date" .Date.UTC.Unix "publishdate" .PublishDate "lastmod" .Lastmod.UTC.Unix "expirydate" .ExpiryDate.UTC.Unix "lang" .Lang "permalink" $permalink "relpermalink" $rel_permalink "title" $title "summary" (plainify $desc | htmlUnescape) "content" (.Plain | htmlUnescape | truncate 5000) "authors" $authors "kind" .Kind "type" .Type "section" .Section "tags" .Params.Tags "categories" .Params.Categories) -}}
+        {{- $index = $index | append (dict "objectID" .File.UniqueID "date" .Date.UTC.Unix "publishdate" .PublishDate "lastmod" .Lastmod.UTC.Unix "expirydate" .ExpiryDate.UTC.Unix "lang" .Lang "permalink" $permalink "relpermalink" $rel_permalink "title" $title "summary" (plainify $desc | htmlUnescape) "content" $content "authors" $authors "kind" .Kind "type" .Type "section" .Section "tags" .Params.Tags "categories" .Params.Categories) -}}
       {{ end }}
     {{ end -}}
   {{- end -}}
