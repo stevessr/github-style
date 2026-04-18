@@ -60,6 +60,11 @@ swup.hooks.on('content:replace', () => {
       initObsidianCallouts();
   }
 
+  // Re-initialize Waline for SPA transitions
+  if (typeof initWaline === 'function') {
+    initWaline();
+  }
+
   // Re-initialize comments (Gitalk, Giscus, etc.)
   // This is tricky as they often insert iframes or scripts.
   // You might need to manually remove and re-add them.
