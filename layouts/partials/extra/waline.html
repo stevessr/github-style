@@ -6,39 +6,41 @@
   href="https://unpkg.com/@waline/client@v3/dist/waline.css"
 />
 <div id="waline"></div>
+<style>
+  /* 强制 Waline 在暗色模式下使用正确的颜色变量 */
+  html[data-color-mode="dark"] #waline {
+    --waline-white: #0d1117;
+    --waline-light-grey: #30363d;
+    --waline-dark-grey: #8b949e;
+    --waline-bg-color: #0d1117;
+    --waline-bg-color-light: #161b22;
+    --waline-border-color: #30363d;
+    --waline-disable-bg-color: #21262d;
+    --waline-disable-color: #8b949e;
+    --waline-code-bg-color: #161b22;
+    --waline-info-bg-color: #161b22;
+    --waline-info-color: #8b949e;
+    --waline-color: #c9d1d9;
+    --waline-active-color: #58a6ff;
+  }
+  /* 修复编辑器在暗色模式下的背景色 */
+  html[data-color-mode="dark"] .wl-editor,
+  html[data-color-mode="dark"] .wl-input,
+  html[data-color-mode="dark"] .wl-header,
+  html[data-color-mode="dark"] .wl-panel,
+  html[data-color-mode="dark"] .wl-container {
+    background-color: #0d1117 !important;
+    color: #c9d1d9 !important;
+  }
+</style>
   <script type="module">
     import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
 
-    let walineInstance = null;
-
-    function initWaline() {
-      const el = document.querySelector('#waline');
-      if (!el) return;
-      
-      walineInstance = init({
-        el: '#waline',
-        serverURL: '{{ .Site.Params.Waline.serverurl }}',
-        dark: document.documentElement.getAttribute('data-color-mode') === 'dark',
-      });
-    }
-
-    initWaline();
-
-    // Watch for theme changes and update Waline
-    const observer = new MutationObserver(() => {
-      if (walineInstance) {
-        const isDark = document.documentElement.getAttribute('data-color-mode') === 'dark';
-        walineInstance.update({ dark: isDark });
-      }
+    init({
+      el: '#waline',
+      serverURL: '{{ .Site.Params.Waline.serverurl }}',
+      dark: 'html[data-color-mode="dark"]',
     });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-color-mode'],
-    });
-
-    // If swup is used, we might need to re-init on content:replace
-    // But since this is in a module script inside #main-content, it's tricky.
-    // However, the theme switching part is now handled.
   </script>
 
 {{ end }}
