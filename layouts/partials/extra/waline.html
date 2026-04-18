@@ -9,10 +9,36 @@
   <script type="module">
     import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
 
-    init({
-      el: '#waline',
-      serverURL: '{{ .Site.Params.Waline.serverurl }}',
+    let walineInstance = null;
+
+    function initWaline() {
+      const el = document.querySelector('#waline');
+      if (!el) return;
+      
+      walineInstance = init({
+        el: '#waline',
+        serverURL: '{{ .Site.Params.Waline.serverurl }}',
+        dark: document.documentElement.getAttribute('data-color-mode') === 'dark',
+      });
+    }
+
+    initWaline();
+
+    // Watch for theme changes and update Waline
+    const observer = new MutationObserver(() => {
+      if (walineInstance) {
+        const isDark = document.documentElement.getAttribute('data-color-mode') === 'dark';
+        walineInstance.update({ dark: isDark });
+      }
     });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-color-mode'],
+    });
+
+    // If swup is used, we might need to re-init on content:replace
+    // But since this is in a module script inside #main-content, it's tricky.
+    // However, the theme switching part is now handled.
   </script>
 
 {{ end }}
