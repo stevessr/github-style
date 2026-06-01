@@ -4,7 +4,7 @@
     <title>{{ .Site.Title }}</title>
     <link>{{ .Site.BaseURL }}</link>
     <description>{{ .Site.Params.description }}</description>
-    <language>{{ .Site.LanguageCode }}</language>
+    <language>{{ .Site.Language.Locale }}</language>
     <lastBuildDate>{{ now.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</lastBuildDate>
 
     {{ range .Pages }}
