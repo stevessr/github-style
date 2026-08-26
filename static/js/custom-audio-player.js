@@ -176,12 +176,13 @@
       this.lyrics = [];
       this.lyricCursor = -1;
       this.lyricToken = 0;
-      this.isFloatingLyricVisible = true;
+      this.isFloatingLyricVisible = false;
       this.hasActiveLyric = false;
       this.isLyricLoading = false;
       this.lyricDragState = null;
       this.lyricStateStorageKey = this.buildLyricStateStorageKey();
       this.isDockedOpen = false;
+      this.dockedStateStorageKey = "custom-audio-player:docked";
       this.themeObserver = null;
     }
 
@@ -190,7 +191,7 @@
       this.cacheElements();
       this.bindEvents();
       this.updateLoopButton();
-      this.setDocked(false);
+      this.setDocked(this.restoreDockedState());
       this.setFloatingLyric("暂无歌词", "");
       this.restoreFloatingLyricState();
       this.setFloatingLyricVisible(this.isFloatingLyricVisible);
@@ -500,6 +501,24 @@
       );
       this.elements.edgeHandle.textContent = this.isDockedOpen ? "收起" : "音乐";
       this.elements.edgeHandle.title = this.isDockedOpen ? "收起播放器" : "展开播放器";
+      if (typeof localStorage !== "undefined") {
+        try {
+          localStorage.setItem(this.dockedStateStorageKey, this.isDockedOpen ? "true" : "false");
+        } catch (_) {
+          // Ignore storage quota / privacy mode errors.
+        }
+      }
+    }
+
+    restoreDockedState() {
+      if (typeof localStorage === "undefined") {
+        return false;
+      }
+      try {
+        return localStorage.getItem(this.dockedStateStorageKey) === "true";
+      } catch (_) {
+        return false;
+      }
     }
 
     syncThemeMode() {
@@ -772,9 +791,8 @@
         if (!parsed || typeof parsed !== "object") {
           return;
         }
-        if (typeof parsed.visible === "boolean") {
-          this.isFloatingLyricVisible = parsed.visible;
-        }
+        // 可见性不再持久化：悬浮歌词默认关闭，仅由用户当次会话手动开启；
+        // 只恢复面板位置，避免老访客的 visible:true 继续默认遮挡页面。
         if (Number.isFinite(parsed.left) && Number.isFinite(parsed.top)) {
           const lyric = this.elements.floatingLyric;
           lyric.style.left = `${parsed.left}px`;
